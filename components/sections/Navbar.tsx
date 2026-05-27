@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { label: "Valores", href: "#valores" },
   { label: "Diseñar(me)", href: "#servicio" },
   { label: "Diseñar(nos)", href: "#servicioGrupos" },
+  { label: "Charlitas", href: "#charlitas" },
   { label: "Preguntas frecuentes", href: "#preguntas" },
 ];
 

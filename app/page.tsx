@@ -1,7 +1,7 @@
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import Philosophy from "@/components/sections/Philosophy";
-import Service from "../components/sections/Service";
+import Service from "@/components/sections/Service";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
 

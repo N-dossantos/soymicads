@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getProductById, formatPrice } from "@/lib/products";
 import { useCurrency } from "@/lib/currency-context";
+import { Portal } from "@/lib/portal";
 
 interface TransferButtonProps {
   productId: string;
-  discountPercent?: number; // 0.05 = 5% off
+  discountPercent?: number;
   className?: string;
 }
 
@@ -14,6 +15,7 @@ export default function TransferButton({ productId, discountPercent = 0.05, clas
   const { currency } = useCurrency();
   const [copiedField, setCopiedField] = useState<"cbu" | "alias" | "full" | null>(null);
   const [open, setOpen] = useState(false);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -25,7 +27,13 @@ export default function TransferButton({ productId, discountPercent = 0.05, clas
     }
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+        copyTimeoutRef.current = null;
+      }
+    };
   }, [open]);
 
   const product = getProductById(productId);
@@ -48,7 +56,7 @@ export default function TransferButton({ productId, discountPercent = 0.05, clas
       .writeText(value)
       .then(() => {
         setCopiedField(label === "CBU" ? "cbu" : "alias");
-        setTimeout(() => setCopiedField(null), 1800);
+        copyTimeoutRef.current = setTimeout(() => setCopiedField(null), 1800);
       })
       .catch(() => {
         alert(`No se pudo copiar ${label}. Copialo manualmente: ${value}`);
@@ -62,7 +70,7 @@ export default function TransferButton({ productId, discountPercent = 0.05, clas
       .then(() => {
         setCopiedField("full");
         setOpen(true);
-        setTimeout(() => setCopiedField(null), 1800);
+        copyTimeoutRef.current = setTimeout(() => setCopiedField(null), 1800);
       })
       .catch(() => {
         alert("No se pudo copiar los datos. Por favor copiá manualmente:\n" + details);
@@ -78,77 +86,76 @@ export default function TransferButton({ productId, discountPercent = 0.05, clas
       >
         Transferencia — {displayDiscount} (ahorrás {Math.round(discountPercent * 100)}%)
       </button>
-      {open ? (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm">
-          <button
-            type="button"
-            aria-label="Cerrar tarjeta de transferencia"
-            onClick={() => setOpen(false)}
-            className="absolute inset-0"
-          />
 
-          <div className="relative z-10 w-full max-w-[42rem] max-h-[calc(100vh-2rem)] overflow-y-auto rounded-[2rem] border border-[#D8C8B9] bg-[#FFF9F4] p-6 shadow-[0_28px_80px_rgba(44,32,24,0.28)] space-y-5">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.18em] text-[#8C6A56] mb-1">Datos bancarios</p>
-                <p className="text-sm font-medium text-[#2C2018]">{bankDetails.holderName}</p>
-                <p className="text-xs text-[#7A6A5A]">{bankDetails.bankName}</p>
+      {open ? (
+        <Portal>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/20 p-2 sm:p-4 backdrop-blur-sm">
+            <button
+              type="button"
+              aria-label="Cerrar tarjeta de transferencia"
+              onClick={() => setOpen(false)}
+              className="absolute inset-0"
+            />
+
+            <div className="relative z-10 w-full max-w-md sm:max-w-lg max-h-[90dvh] overflow-y-auto rounded-2xl sm:rounded-[2rem] border border-[#D8C8B9] bg-[#FFF9F4] p-4 sm:p-6 shadow-[0_28px_80px_rgba(44,32,24,0.28)] space-y-4 sm:space-y-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#8C6A56] mb-1">Datos bancarios</p>
+                  <p className="text-sm font-medium text-[#2C2018] truncate">{bankDetails.holderName}</p>
+                  <p className="text-xs text-[#7A6A5A]">{bankDetails.bankName}</p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="shrink-0 rounded-full border border-[#C9B9A9] px-3 py-1 text-xs font-medium text-[#53392B] hover:bg-white transition"
+                >
+                  Cerrar
+                </button>
+              </div>
+
+              <div className="space-y-3 rounded-2xl border border-[#E7DBD1] bg-white p-4">
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">CBU</p>
+                  <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetails.cbu}</p>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard("CBU", bankDetails.cbu)}
+                    className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                  >
+                    {copiedField === "cbu" ? "¡Copiado!" : "Copiar CBU"}
+                  </button>
+                </div>
+
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Alias</p>
+                  <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetails.alias}</p>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard("alias", bankDetails.alias)}
+                    className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                  >
+                    {copiedField === "alias" ? "¡Copiado!" : "Copiar alias"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-[#F8F1EB] p-4 space-y-2">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Importe a transferir</p>
+                <p className="text-lg font-semibold text-[#2C2018]">{displayDiscount}</p>
+                <p className="text-xs text-[#7A6A5A]">Transferencia manual con descuento.</p>
               </div>
 
               <button
                 type="button"
-                onClick={() => setOpen(false)}
-                className="rounded-full border border-[#C9B9A9] px-3 py-1 text-xs font-medium text-[#53392B] hover:bg-white transition"
+                onClick={copyBankDetails}
+                className="w-full rounded-full bg-[#2C2018] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#3B2A20] transition"
               >
-                Cerrar
+                {copiedField === "full" ? "¡Datos copiados!" : "Copiar datos completos y monto"}
               </button>
             </div>
-
-            <div className="space-y-3 rounded-2xl border border-[#E7DBD1] bg-white p-4">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">CBU</p>
-                <p className="text-sm font-medium text-[#2C2018] break-all">{bankDetails.cbu}</p>
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard("CBU", bankDetails.cbu)}
-                  className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
-                >
-                  {copiedField === "cbu" ? "¡Copiado!" : "Copiar CBU"}
-                </button>
-              </div>
-
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Alias</p>
-                <p className="text-sm font-medium text-[#2C2018] break-all">{bankDetails.alias}</p>
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard("alias", bankDetails.alias)}
-                  className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
-                >
-                  {copiedField === "alias" ? "¡Copiado!" : "Copiar alias"}
-                </button>
-              </div>
-            </div>
-
-            <div className="rounded-2xl bg-[#F8F1EB] p-4 space-y-2">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Importe a transferir</p>
-              <p className="text-lg font-semibold text-[#2C2018]">{displayDiscount}</p>
-              <p className="text-xs text-[#7A6A5A]">Transferencia manual con descuento.</p>
-            </div>
-
-            <button
-              type="button"
-              onClick={copyBankDetails}
-              className="w-full rounded-full bg-[#2C2018] px-4 py-2 text-sm font-medium text-white hover:bg-[#3B2A20] transition"
-            >
-              Copiar datos completos y monto
-            </button>
-
-            {copiedField === "full" ? (
-              <p className="text-xs text-[#2F7A4B] text-center font-medium">Datos completos copiados</p>
-            ) : null}
           </div>
-        </div>
+        </Portal>
       ) : (
         <p className="text-xs text-[#7A6A5A] text-center">Abrí la tarjeta para ver tus datos bancarios y copiar lo necesario.</p>
       )}
