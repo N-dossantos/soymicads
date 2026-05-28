@@ -17,7 +17,6 @@ export default function PayButton({
   className = "",
 }: PayButtonProps) {
   const { currency } = useCurrency();
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bizumCopied, setBizumCopied] = useState(false);
   const [bizumOpen, setBizumOpen] = useState(false);
@@ -125,59 +124,18 @@ export default function PayButton({
     );
   }
 
-  // ARS: crear un link de pago de Mercado Pago y redirigir al checkout.
-  async function handleMercadoPagoLink() {
-    setLoading(true);
+  // ARS: abrir link manual de Mercado Pago configurado por producto.
+  function handleMercadoPagoLink() {
+    if (!product) return;
     setError(null);
 
-    try {
-      // If a manual Mercado Pago link is provided in the product, open it in a new tab.
-      if (product!.mercadoLink) {
-        window.open(product!.mercadoLink, "_blank", "noopener,noreferrer");
-        window.location.href = `/pago-en-proceso/link?product=${encodeURIComponent(product!.id)}`;
-        return;
-      }
-
-      // No manual link: open a blank tab immediately so the browser treats it as a user-initiated
-      // action (avoids popup blockers), then fetch the preference and set its location.
-      const newTab = window.open("", "_blank");
-      if (newTab) newTab.opener = null;
-
-      // Fallback: call the legacy API endpoint that creates a preference.
-      const res = await fetch("/api/create-preference", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          product_id: product!.id,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        // Close the blank tab if the request failed.
-        if (newTab) newTab.close();
-        throw new Error(data.error ?? "Error al procesar el pago");
-      }
-
-      // Redirect the opened tab to the Mercado Pago preference link returned by the API.
-      const url =
-        process.env.NODE_ENV === "production"
-          ? data.init_point
-          : data.sandbox_init_point ?? data.init_point;
-
-      if (newTab) {
-        newTab.location.href = url;
-      } else {
-        // As a last resort, navigate current window (should be rare since we opened a tab earlier).
-        window.location.href = url;
-      }
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "Error desconocido";
-      setError(msg);
-    } finally {
-      setLoading(false);
+    if (!product.mercadoLink) {
+      setError("No hay link de pago configurado para este servicio.");
+      return;
     }
+
+    window.open(product.mercadoLink, "_blank", "noopener,noreferrer");
+    window.location.href = `/pago-en-proceso/link?product=${encodeURIComponent(product.id)}`;
   }
 
   const baseStyles = "w-full py-3 rounded-full text-sm font-medium transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed";
@@ -189,20 +147,9 @@ export default function PayButton({
       <button
         type="button"
         onClick={handleMercadoPagoLink}
-        disabled={loading}
         className={`${baseStyles} ${variant === "primary" ? primaryStyles : ghostStyles} ${className}`}
       >
-        {loading ? (
-          <span className="flex items-center justify-center gap-2">
-            <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            Procesando...
-          </span>
-        ) : (
-          `Abrir link de pago ${price}`
-        )}
+        {`Abrir link de pago ${price}`}
       </button>
 
       {error && (

@@ -26,8 +26,7 @@ Copiá el archivo de ejemplo:
 cp .env.example .env.local
 ```
 
-Abrí `.env.local` y pegá tu **Access Token de Mercado Pago**. Lo obtenés en:
-👉 [mercadopago.com.ar/developers/panel](https://www.mercadopago.com.ar/developers/panel/app)
+Abrí `.env.local` y configurá las variables que uses en tu proyecto (por ejemplo `NEXT_PUBLIC_BIZUM_PHONE`).
 
 ### Paso 4 — Corré el servidor de desarrollo
 
@@ -49,9 +48,6 @@ mood-budita/
 │   ├── globals.css             # Estilos globales y fuentes
 │   ├── gracias/
 │   │   └── page.tsx            # Página post-pago exitoso
-│   └── api/
-│       └── create-preference/
-│           └── route.ts        # Endpoint de Mercado Pago
 │
 ├── components/
 │   ├── ui/
@@ -77,18 +73,14 @@ mood-budita/
 
 ---
 
-## 💳 Configurar Mercado Pago
+## 💳 Configurar pagos
 
-1. Entrá a [mercadopago.com.ar/developers](https://www.mercadopago.com.ar/developers/panel/app)
-2. Creá una aplicación
-3. Copiá el **Access Token** de producción
-4. Pegalo en `.env.local` como `MP_ACCESS_TOKEN=APP_USR-...`
-5. Cambiá `NEXT_PUBLIC_BASE_URL` a la URL de tu sitio en producción
+Los links de pago están configurados manualmente por producto en `lib/products.ts` (`mercadoLink`) y se abren directamente desde la UI.
 
 **Flujo del pago:**
 ```
-Usuario hace clic → /api/create-preference → Mercado Pago genera URL → 
-Usuario paga → MP redirige a /gracias → Usuario agenda sesión (Calendly)
+Usuario hace clic → se abre el link manual de pago →
+Usuario paga → continúa a /gracias → agenda sesión (Calendly)
 ```
 
 ---
@@ -117,7 +109,7 @@ Después usás `<PayButton productId="nuevo_servicio" />` en cualquier component
 
 1. Subí el proyecto a GitHub
 2. Entrá a [vercel.com](https://vercel.com) y conectá tu repositorio
-3. En "Environment Variables", agregá `MP_ACCESS_TOKEN` y `NEXT_PUBLIC_BASE_URL`
+3. En "Environment Variables", agregá solo las que uses en frontend (por ejemplo `NEXT_PUBLIC_BIZUM_PHONE`)
 4. Vercel despliega automáticamente con cada push
 
 ---
