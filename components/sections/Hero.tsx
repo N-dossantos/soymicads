@@ -17,7 +17,7 @@ export default function Hero() {
             No venís a sanar. <br/>Venís a vivir siendo vos.
           </h1>
 
-          <p className="text-[17px] sm:text-[18px] leading-[1.9] text-[#6a5875] max-w-xl mb-8 animate-fade-in">
+          <p className="poppins-regular text-[17px] sm:text-[18px] leading-[1.9] text-[#6a5875] max-w-xl mb-8 animate-fade-in">
             ¿Te sentís raro, apagado, estancado, perdido o con la sensación de que algo no encaja
             aunque "todo esté bien"?
             ¿Sentís que te esforzás por ser de una forma que en el fondo no es tuya? <br/><br/>
@@ -40,12 +40,13 @@ export default function Hero() {
 
             <div className="grid gap-3">
               {[
-                { label: "Individual", value: "Diseñar (me)" },
-                { label: "Vincular", value: "Diseñar (nos)" },
-                { label: "Otros", value: "Charlitas" },
+                { label: "Individual", value: "Diseñar (me)", href: "#servicio" },
+                { label: "Vincular", value: "Diseñar (nos)", href: "#servicioGrupos" },
+                { label: "Otros", value: "Charlitas", href: "#charlitas" },
               ].map((item, index) => (
-                <div
+                <a
                   key={item.label}
+                  href={item.href}
                   className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.6)] bg-[linear-gradient(135deg,rgba(242,157,142,0.14),rgba(246,189,139,0.12),rgba(252,229,148,0.12),rgba(161,210,197,0.12),rgba(179,213,238,0.14),rgba(206,175,210,0.14))] p-4 transition duration-300 hover:-translate-y-0.5 hover:bg-white"
                   style={{ boxShadow: index === 0 ? "0 16px 40px rgba(242,157,142,0.12)" : "none" }}
                 >
@@ -55,7 +56,7 @@ export default function Hero() {
                       <p className="mt-1 text-sm font-medium text-[#2C2018]">{item.value}</p>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
 

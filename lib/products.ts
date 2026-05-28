@@ -13,6 +13,13 @@ export interface Product {
   description: string;
   priceARS: number;
   priceEUR: number;
+  // Precios específicos por método para poder ingresarlos manualmente
+  priceMercadoARS?: number; // Mercado Pago (ARS)
+  priceTransferARS?: number; // Transferencia bancaria (ARS)
+  priceBizumEUR?: number; // Bizum / pago en EUR
+  priceTransferEUR?: number; // Transferencia en EUR
+  mercadoLink?: string; // Link de pago de Mercado Pago proporcionado manualmente
+  calendlyLink?: string; // Link de agenda para esta sesión
   paymentMethod: PaymentMethod;
   category: "diseniarme" | "membresia";
 }
@@ -23,8 +30,14 @@ export const PRODUCTS: Product[] = [
     id: "designme_single",
     title: "Sesión suelta — Diseñar(me)",
     description: "Sesión única para explorar y despejar dudas.",
-    priceARS: 40_000,
+    priceARS: 41_000,
     priceEUR: 25,
+    priceMercadoARS: 41_000,
+    priceTransferARS: 37_000,
+    priceBizumEUR: 25,
+    priceTransferEUR: 25,
+    mercadoLink: "https://mpago.la/2xZRfT4",
+    calendlyLink: "https://cal.com/soymicads/disenar-me",
     paymentMethod: "mercadopago",
     category: "diseniarme",
   },
@@ -32,48 +45,47 @@ export const PRODUCTS: Product[] = [
     id: "designme_full",
     title: "Proceso completo — Diseñar(me)",
     description: "6 sesiones + reporte personalizado.",
-    priceARS: 210_000,
+    priceARS: 230_000,
     priceEUR: 125,
+    priceMercadoARS: 230_000,
+    priceTransferARS: 210_000,
+    priceBizumEUR: 125,
+    priceTransferEUR: 125,
+    mercadoLink: "https://mpago.la/1QHUbwd",
+    calendlyLink: "https://cal.com/soymicads/disenar-me",
     paymentMethod: "mercadopago",
     category: "diseniarme",
   },
 
   // DISEÑAR(NOS) — PAREJA
   {
-    id: "disenarnos_pareja_single",
-    title: "Sesión suelta — Diseñar(nos) Pareja",
-    description: "Sesión para parejas: explorar dinámica entre dos diseños.",
-    priceARS: 70_000,
-    priceEUR: 40,
-    paymentMethod: "mercadopago",
-    category: "diseniarme",
-  },
-  {
     id: "disenarnos_pareja_full",
     title: "Proceso completo — Diseñar(nos) Pareja",
     description: "4 sesiones en pareja + 2 individuales + pdf personalizado.",
-    priceARS: 360_000,
+    priceARS: 390_000,
     priceEUR: 210,
+    priceMercadoARS: 390_000,
+    priceTransferARS: 360_000,
+    priceBizumEUR: 210,
+    priceTransferEUR: 210,
+    mercadoLink: "https://mpago.la/1a9RMSA",
+    calendlyLink: "https://cal.com/soymicads/disenar-nos",
     paymentMethod: "mercadopago",
     category: "diseniarme",
   },
 
   // DISEÑAR(NOS) — GRUPO (por persona)
   {
-    id: "disenarnos_group_single",
-    title: "Sesión suelta — Grupo (por persona)",
-    description: "Sesión para grupos (por persona).",
-    priceARS: 25_000,
-    priceEUR: 15,
-    paymentMethod: "mercadopago",
-    category: "diseniarme",
-  },
-  {
     id: "disenarnos_group_full",
     title: "Proceso completo — Grupo (por persona)",
     description: "Proceso completo por persona en equipo.",
     priceARS: 80_000,
     priceEUR: 50,
+    priceMercadoARS: 80_000,
+    priceTransferARS: 80_000,
+    priceBizumEUR: 50,
+    priceTransferEUR: 50,
+    calendlyLink: "https://cal.com/soymicads/disenar-nos",
     paymentMethod: "mercadopago",
     category: "diseniarme",
   },
@@ -83,8 +95,14 @@ export const PRODUCTS: Product[] = [
     id: "charlitas_intro",
     title: "Charlita — Para conocernos",
     description: "Encuentro introductorio de 30 min.",
-    priceARS: 10_000,
+    priceARS: 11_000,
     priceEUR: 5,
+    priceMercadoARS: 11_000,
+    priceTransferARS: 10_000,
+    priceBizumEUR: 5,
+    priceTransferEUR: 5,
+    mercadoLink: "https://mpago.la/1VixrsA",
+    calendlyLink: "https://cal.com/soymicads/encuentro-para-conocernos",
     paymentMethod: "mercadopago",
     category: "diseniarme",
   },
@@ -92,8 +110,14 @@ export const PRODUCTS: Product[] = [
     id: "charlitas_acompan",
     title: "Charlita — Acompañamiento desde mi mirada",
     description: "Sesión de 1 hora enfocada en presencia y lectura.",
-    priceARS: 40_000,
+    priceARS: 44_000,
     priceEUR: 25,
+    priceMercadoARS: 44_000,
+    priceTransferARS: 40_000,
+    priceBizumEUR: 25,
+    priceTransferEUR: 25,
+    mercadoLink: "https://mpago.la/25j453h",
+    calendlyLink: "https://cal.com/soymicads/charlita",
     paymentMethod: "mercadopago",
     category: "diseniarme",
   },

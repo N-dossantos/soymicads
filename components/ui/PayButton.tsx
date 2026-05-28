@@ -28,11 +28,10 @@ export default function PayButton({
 
   const price =
     currency === "ARS"
-      ? formatPrice(product.priceARS, "ARS")
-      : formatPrice(product.priceEUR, "EUR");
+      ? formatPrice(product.priceMercadoARS ?? product.priceARS, "ARS")
+      : formatPrice(product.priceBizumEUR ?? product.priceEUR, "EUR");
 
   const bizumPhone = process.env.NEXT_PUBLIC_BIZUM_PHONE ?? "664585365"; // Número de teléfono para pagos con Bizum (formato internacional)
-  const bizumPhoneText = "🇪🇸 664 585 365";
 
   useEffect(() => {
     if (!bizumOpen) return;
@@ -102,7 +101,14 @@ export default function PayButton({
 
                 <div className="rounded-2xl border border-[rgba(107,79,58,0.14)] bg-white/80 px-4 py-4 text-center">
                   <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Número de Bizum</p>
-                  <p className="mt-1 text-lg font-semibold text-[#2C2018]">{bizumPhoneText}</p>
+                  <div className="mt-2 flex items-center justify-center gap-2 text-lg font-semibold text-[#2C2018]">
+                    <img
+                      src="/images/bandera_España.png"
+                      alt="Bandera de España"
+                      className="h-5 w-7 shrink-0 rounded-[2px] border border-[rgba(107,79,58,0.12)] object-cover"
+                    />
+                    <span>664 585 365</span>
+                  </div>
                   <button
                     type="button"
                     onClick={copyBizumPhone}
@@ -125,6 +131,19 @@ export default function PayButton({
     setError(null);
 
     try {
+      // If a manual Mercado Pago link is provided in the product, open it in a new tab.
+      if (product!.mercadoLink) {
+        window.open(product!.mercadoLink, "_blank", "noopener,noreferrer");
+        window.location.href = `/pago-en-proceso/link?product=${encodeURIComponent(product!.id)}`;
+        return;
+      }
+
+      // No manual link: open a blank tab immediately so the browser treats it as a user-initiated
+      // action (avoids popup blockers), then fetch the preference and set its location.
+      const newTab = window.open("", "_blank");
+      if (newTab) newTab.opener = null;
+
+      // Fallback: call the legacy API endpoint that creates a preference.
       const res = await fetch("/api/create-preference", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -135,16 +154,24 @@ export default function PayButton({
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error ?? "Error al procesar el pago");
+      if (!res.ok) {
+        // Close the blank tab if the request failed.
+        if (newTab) newTab.close();
+        throw new Error(data.error ?? "Error al procesar el pago");
+      }
 
-      // Redirigir al link de pago de Mercado Pago.
-      // Usar sandbox_init_point para pruebas, init_point para producción
+      // Redirect the opened tab to the Mercado Pago preference link returned by the API.
       const url =
         process.env.NODE_ENV === "production"
           ? data.init_point
           : data.sandbox_init_point ?? data.init_point;
 
-      window.location.href = url;
+      if (newTab) {
+        newTab.location.href = url;
+      } else {
+        // As a last resort, navigate current window (should be rare since we opened a tab earlier).
+        window.location.href = url;
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Error desconocido";
       setError(msg);

@@ -97,7 +97,7 @@ export default function Service() {
             "Aprender a escuchar las señales del cuerpo en pareja",
             "Tomar decisiones más claras como equipo",
           ],
-          prices: { single: { ars: "$70.000 ARS", eur: "40€" }, full: { ars: "$360.000 ARS", eur: "210€" } },
+          note: "Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000",
         },
         group: {
           note: "Para grupos de más de 3 personas",
@@ -271,11 +271,31 @@ export default function Service() {
                                 </li>
                               ))}
                             </ul>
+                            {it.id.includes("pareja") ? (
+                              <p className="mt-4 text-xs text-[#6a5875] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
+                            ) : null}
                           </div>
                         ) : null}
 
                         <div className="mt-6 grid gap-3 sm:grid-cols-1">
-                          {product ? (
+                          {sec.id === "disenarnos" && it.id.includes("group") ? (
+                            <div className="space-y-3">
+                              <p className="text-md text-[#6a5875] font-bold">
+                                Ésta es una experiencia personalizada... 
+                              </p>
+
+                              <a
+                                href={`https://api.whatsapp.com/send?phone=5491150294100&text=${encodeURIComponent(
+                                  "Hola! Quiero consultar el precio y coordinar el proceso para equipos de trabajo o grupo de amigos."
+                                )}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full py-3 rounded-full text-sm font-medium bg-[#2C2018] text-white shadow-[0_14px_36px_rgba(44,32,24,0.22)] hover:bg-[#1a120c] transition-all duration-200 text-center"
+                              >
+                                Continuamos por WhatsApp →
+                              </a>
+                            </div>
+                          ) : product ? (
                             <>
                               <div className="w-full">
                                 <PayButton productId={product.id} variant="primary" />

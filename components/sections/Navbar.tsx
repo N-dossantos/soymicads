@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import CurrencyToggle from "@/components/ui/CurrencyToggle";
 
 const NAV_LINKS = [
-  { label: "Valores", href: "#valores" },
   { label: "Diseñar(me)", href: "#servicio" },
   { label: "Diseñar(nos)", href: "#servicioGrupos" },
   { label: "Charlitas", href: "#charlitas" },
