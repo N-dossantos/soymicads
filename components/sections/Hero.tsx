@@ -2,7 +2,7 @@
 
 export default function Hero() {
   return (
-    <section className="relative pt-10 sm:pt-32 pb-20 px-4 sm:px-6">
+    <section className="relative pt-28 sm:pt-32 pb-20 px-4 sm:px-6">
       <div className="absolute inset-x-0 top-0 -z-10 mx-auto h-[680px] max-w-6xl">
         <div className="absolute left-8 top-16 h-64 w-64 rounded-full rainbow-glow" />
         <div className="absolute right-10 top-28 h-72 w-72 rounded-full bg-[rgba(179,213,238,0.2)] blur-3xl" />

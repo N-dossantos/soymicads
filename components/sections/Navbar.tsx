@@ -25,7 +25,7 @@ export default function Navbar() {
       <div className="fixed top-0 left-0 right-0 z-50 h-1 rainbow-bar" />
 
       <nav
-        className={`sticky top-0 z-40 px-4 sm:px-6 transition-all duration-300 md:fixed md:left-0 md:right-0 ${scrolled ? "" : ""}`}
+        className={`fixed top-0 left-0 right-0 z-40 px-4 sm:px-6 transition-all duration-300 ${scrolled ? "" : ""}`}
       >
         <div className={`max-w-6xl mx-auto h-16 px-4 sm:px-5 rounded-full premium-shell ${scrolled ? "mt-2" : "mt-3"} flex items-center justify-between gap-4`}>
           <a href="/" className="group flex items-center gap-3">
