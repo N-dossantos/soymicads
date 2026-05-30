@@ -41,7 +41,7 @@ export default function Hero() {
             <div className="grid gap-3">
               {[
                 { label: "Individual", value: "Diseñar (me)", href: "#servicio" },
-                { label: "Vincular", value: "Diseñar (nos)", href: "#servicioGrupos" },
+                { label: "Relaciones", value: "Diseñar (nos)", href: "#servicioGrupos" },
                 { label: "Otros", value: "Charlitas", href: "#charlitas" },
               ].map((item, index) => (
                 <a

@@ -63,7 +63,7 @@ export default function Service() {
     },
     {
       id: "disenarnos",
-      title: "Diseñar(nos) — Vincular",
+      title: "Diseñar(nos) — Relaciones",
       items: [
         {
           id: "disenarnos_pareja_full",

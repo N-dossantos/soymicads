@@ -116,6 +116,16 @@ export default function PayButton({
                     {bizumCopied ? "Teléfono copiado" : "Copiar teléfono"}
                   </button>
                 </div>
+                <div className="mt-4">
+                  <p className="text-sm text-[#7A6A5A] text-center mb-2">Si ya realizaste el pago</p>
+                  <a
+                    href={`/pago-en-proceso/transferencia?product=${encodeURIComponent(productId)}`}
+                    onClick={() => setBizumOpen(false)}
+                    className="block w-full text-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                  >
+                    Enviar comprobante / Continuar →
+                  </a>
+                </div>
               </div>
             </div>
           </Portal>
