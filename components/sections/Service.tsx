@@ -151,7 +151,7 @@ export default function Service() {
               <div key={sec.id} id={sec.id === "disenarnos" ? "servicioGrupos" : sec.id === "charlitas" ? "charlitas" : undefined} className="relative">
                 <div className="mb-5 flex items-end justify-between gap-4">
                   <div>
-                    <p className="section-title text-2xl sm:text-3xl font-medium">{sec.id === "disenarme" ? "Diseñar(me)" : sec.title}</p>
+                    <p className="section-title text-2xl sm:text-3xl font-medium">{sec.id === "disenarme" ? "Diseñar(me) - Individual" : sec.title}</p>
                   </div>
                 </div>
 
