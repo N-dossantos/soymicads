@@ -192,6 +192,7 @@ export default function Service() {
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   {sec.items.map((it, idx) => {
                     const product = getProductById(it.id);
+                    const isFreeIntro = product?.id === "charlitas_intro";
                     const rainbow = ["#E8776A", "#E8A86A", "#D4C46A", "#7AC46A", "#6AAED4", "#9B7AC4"];
                     const accent = rainbow[idx % rainbow.length];
 
@@ -227,13 +228,15 @@ export default function Service() {
                           <div className="rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-right shadow-sm backdrop-blur-md">
                             <p className="text-[11px] uppercase tracking-[0.18em] text-[#8a6a84]">Precio</p>
                             <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
-                              {product
+                              {isFreeIntro
+                                ? "Gratis"
+                                : product
                                 ? currency === "ARS"
                                   ? formatPrice(product.priceARS, "ARS")
                                   : formatPrice(product.priceEUR, "EUR")
                                 : "—"}
                             </p>
-                            <p className="text-xs text-[#6a5875]">{currency === "ARS" ? "ARS" : "EUR"}</p>
+                            <p className="text-xs text-[#6a5875]">{isFreeIntro ? "Sin costo" : currency === "ARS" ? "ARS" : "EUR"}</p>
                           </div>
                         </div>
 
@@ -264,12 +267,14 @@ export default function Service() {
                           <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4 backdrop-blur-md">
                             <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
                             <ul className="grid grid-cols-1 gap-2 text-[13px] text-[#6a5875] sm:grid-cols-2">
-                              {outcomesList.slice(0, 6).map((o, i) => (
-                                <li key={i} className="flex gap-2">
-                                  <span className="mt-2 h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
-                                  <span className="leading-6">{o}</span>
-                                </li>
-                              ))}
+                              {outcomesList.slice(0, 6).map((o, i) => {
+                                return (
+                                  <li key={i} className="flex gap-2">
+                                    <span className="mt-2 h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
+                                    <span className="leading-6">{o}</span>
+                                  </li>
+                                );
+                              })}
                             </ul>
                             {it.id.includes("pareja") ? (
                               <p className="mt-4 text-xs text-[#6a5875] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
@@ -295,6 +300,15 @@ export default function Service() {
                                 Continuamos por WhatsApp →
                               </a>
                             </div>
+                          ) : isFreeIntro && product?.calendlyLink ? (
+                            <a
+                              href={product.calendlyLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block w-full py-3 rounded-full text-sm font-medium bg-[#2C2018] text-white shadow-[0_14px_36px_rgba(44,32,24,0.22)] hover:bg-[#1a120c] transition-all duration-200 text-center"
+                            >
+                              Agendar sesión
+                            </a>
                           ) : product ? (
                             <>
                               <div className="w-full">
