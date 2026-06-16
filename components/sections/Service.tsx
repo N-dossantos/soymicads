@@ -149,7 +149,7 @@ export default function Service() {
   ];
 
     return (
-      <section id="servicio" className="relative py-24 px-4 sm:px-6">
+      <section id="servicio" className="relative py-24 px-4 sm:px-6 overflow-hidden">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(242,157,142,0.5)] to-transparent" />
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 text-center">

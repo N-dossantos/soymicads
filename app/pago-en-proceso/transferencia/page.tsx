@@ -33,7 +33,7 @@ export default function PagoEnProcesoTransferenciaPage({
   const mailto = buildMailto(product?.title, amount);
 
   return (
-    <main className="relative isolate min-h-screen flex flex-col items-center justify-center p-4">
+    <main className="relative isolate min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden">
       {/* Top rainbow bar */}
       <div className="fixed top-0 left-0 right-0 z-50 h-1 rainbow-bar" />
 
