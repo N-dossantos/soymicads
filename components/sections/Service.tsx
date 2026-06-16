@@ -5,6 +5,16 @@ import TransferButton from "@/components/ui/TransferButton";
 import { useCurrency } from "@/lib/currency-context";
 import { formatPrice, getProductById } from "@/lib/products";
 
+
+const rainbowPseudo = [
+  "relative isolate overflow-hidden",
+  "after:content-[''] after:absolute after:inset-0 after:rounded-full after:z-[-2]",
+  "after:bg-[linear-gradient(90deg,#f29d8e,#f6bd8b,#fce594,#a1d2c5,#b3d5ee,#ceafd2)]",
+  "before:content-[''] before:absolute before:inset-0 before:rounded-full before:z-[-1]",
+  "before:transition-opacity before:duration-200",
+].join(" ");
+
+
 export default function Service() {
   const { currency } = useCurrency();
 
@@ -119,7 +129,7 @@ export default function Service() {
         {
           id: "charlitas_intro",
           title: "Para conocernos — Sesión corta",
-          subtitle: "30 min",
+          subtitle: "15 min",
           desc: `Encuentro breve para resolver dudas, conocernos y decidir si iniciar un proceso.`,
           modal: "online",
         },
@@ -284,9 +294,9 @@ export default function Service() {
 
                         <div className="mt-6 grid gap-3 sm:grid-cols-1">
                           {sec.id === "disenarnos" && it.id.includes("group") ? (
-                            <div className="space-y-3">
-                              <p className="text-md text-[#6a5875] font-bold">
-                                Ésta es una experiencia personalizada... 
+                            <div className="flex flex-col h-full">
+                              <p className="text-md text-[#6a5875] font-bold mb-4">
+                                Ésta es una experiencia personalizada...
                               </p>
 
                               <a
@@ -295,7 +305,7 @@ export default function Service() {
                                 )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block w-full py-3 rounded-full text-sm font-medium bg-[#2C2018] text-white shadow-[0_14px_36px_rgba(44,32,24,0.22)] hover:bg-[#1a120c] transition-all duration-200 text-center"
+                                className={`${rainbowPseudo} mt-auto w-full py-4 px- rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
                               >
                                 Continuamos por WhatsApp →
                               </a>
@@ -305,7 +315,7 @@ export default function Service() {
                               href={product.calendlyLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="block w-full py-3 rounded-full text-sm font-medium bg-[#2C2018] text-white shadow-[0_14px_36px_rgba(44,32,24,0.22)] hover:bg-[#1a120c] transition-all duration-200 text-center"
+                              className={`${rainbowPseudo} w-full py-4 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
                             >
                               Agendar sesión
                             </a>

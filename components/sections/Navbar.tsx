@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import CurrencyToggle from "@/components/ui/CurrencyToggle";
 
 const NAV_LINKS = [
@@ -10,9 +10,13 @@ const NAV_LINKS = [
   { label: "Preguntas frecuentes", href: "#preguntas" },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  menuOpen: boolean;
+  onMenuOpenChange: (open: boolean) => void;
+}
+
+export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -56,7 +60,7 @@ export default function Navbar() {
             <CurrencyToggle />
             <button
               className="md:hidden rounded-full border border-white/70 bg-white/60 p-2 text-[#6a5875] shadow-sm backdrop-blur-xl"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => onMenuOpenChange(!menuOpen)}
               aria-label="Menú"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
@@ -83,7 +87,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className="block rounded-2xl px-4 py-3 text-sm text-[#6F5646] transition-colors hover:bg-white hover:text-[#2C2018]"
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => onMenuOpenChange(false)}
                 >
                   {link.label}
                 </a>

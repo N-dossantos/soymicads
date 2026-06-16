@@ -10,6 +10,14 @@ interface PayButtonProps {
   variant?: "primary" | "ghost";
   className?: string;
 }
+const rainbowPseudo = [
+  "relative isolate overflow-hidden",
+  "after:content-[''] after:absolute after:inset-0 after:rounded-full after:z-[-2]",
+  "after:bg-[linear-gradient(90deg,#f29d8e,#f6bd8b,#fce594,#a1d2c5,#b3d5ee,#ceafd2)]",
+  "before:content-[''] before:absolute before:inset-0 before:rounded-full before:z-[-1]",
+  "before:transition-opacity before:duration-200",
+].join(" ");
+
 
 export default function PayButton({
   productId,
@@ -68,8 +76,7 @@ export default function PayButton({
         <button
           type="button"
           onClick={() => setBizumOpen(true)}
-          className={`w-full py-3 rounded-full text-sm font-medium border border-[rgba(107,79,58,0.14)] bg-white/55 text-[#8C6A56] transition-all backdrop-blur-sm ${className}`}
-        >
+          className={`${rainbowPseudo} w-full py-3 rounded-full text-sm font-medium border border-[rgba(107,79,58,0.14)] text-[#2C2018] backdrop-blur-sm before:bg-white/55 before:opacity-90 hover:before:opacity-40 ${className}`}        >
           Pagar con Bizum {price}
         </button>
 
@@ -148,16 +155,12 @@ export default function PayButton({
     window.location.href = `/pago-en-proceso/link?product=${encodeURIComponent(product.id)}`;
   }
 
-  const baseStyles = "w-full py-3 rounded-full text-sm font-medium transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed";
-  const primaryStyles = "bg-[#2C2018] text-white shadow-[0_14px_36px_rgba(44,32,24,0.16)] hover:bg-[#3B2A20]";
-  const ghostStyles = "border border-[rgba(107,79,58,0.16)] bg-white/60 text-[#2C2018] backdrop-blur-sm hover:border-[rgba(196,132,106,0.35)] hover:bg-white";
-
   return (
     <div className="space-y-2">
       <button
         type="button"
         onClick={handleMercadoPagoLink}
-        className={`${baseStyles} ${variant === "primary" ? primaryStyles : ghostStyles} ${className}`}
+        className={`${rainbowPseudo} w-full py-3 rounded-full text-sm font-medium border border-[rgba(107,79,58,0.14)] text-[#2C2018] backdrop-blur-sm before:bg-white/55 before:opacity-90 hover:before:opacity-40 ${className}`}
       >
         {`Abrir link de pago ${price}`}
       </button>

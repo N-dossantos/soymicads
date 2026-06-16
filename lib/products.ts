@@ -94,7 +94,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "charlitas_intro",
     title: "Charlita — Para conocernos",
-    description: "Encuentro introductorio de 30 min.",
+    description: "Encuentro introductorio de 15 min.",
     priceARS: 0,
     priceEUR: 0,
     priceMercadoARS: 0,

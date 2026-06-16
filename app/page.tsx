@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Navbar from "@/components/sections/Navbar";
 import Hero from "@/components/sections/Hero";
 import Philosophy from "@/components/sections/Philosophy";
@@ -6,10 +9,12 @@ import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <main className="relative isolate min-h-screen overflow-hidden">
-      <Navbar />
-      <Hero />
+    <main className="relative isolate min-h-screen">
+      <Navbar menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
+      <Hero menuOpen={menuOpen} />
       <Philosophy />
       <Service />
       <FAQ />
