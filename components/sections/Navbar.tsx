@@ -31,8 +31,8 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
       <nav
         className={`fixed top-0 left-0 right-0 z-40 px-4 sm:px-6 transition-all duration-300 ${scrolled ? "" : ""}`}
       >
-        <div className={`max-w-6xl mx-auto h-16 px-4 sm:px-5 rounded-full premium-shell ${scrolled ? "mt-2" : "mt-3"} flex items-center justify-between gap-4`}>
-          <a href="/" className="group flex items-center gap-3">
+        <div className={`max-w-6xl mx-auto h-16 px-4 sm:px-5 rounded-full premium-shell ${scrolled ? "mt-2" : "mt-3"} flex items-center justify-between gap-2 min-[360px]:gap-4`}>
+          <a href="/" className="group flex items-center gap-2 min-[360px]:gap-3">
             <img
               src="/images/logo.jpeg"
               alt="Mica Ds"
@@ -40,7 +40,7 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
             />
             <span className="flex flex-col leading-none">
               <span className="rainbow-text font-serif text-[1.05rem] font-medium">Mica Ds</span>
-              <span className="text-[11px] uppercase tracking-[0.18em] text-[#8a6a84]">Diseño humano</span>
+              <span className="hidden min-[380px]:block text-[11px] uppercase tracking-[0.18em] text-[#8a6a84]">Diseño humano</span>
             </span>
           </a>
 
@@ -49,17 +49,17 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
               <a
                 key={link.href}
                 href={link.href}
-                className="rounded-full px-4 py-2 text-sm text-[#6a5875] transition-all hover:bg-white hover:text-[#2C2018]"
+                className="rounded-full px-4 py-2 text-sm text-[#4A3556] transition-all hover:bg-white hover:text-[#2C2018]"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 min-[360px]:gap-3">
             <CurrencyToggle />
             <button
-              className="md:hidden rounded-full border border-white/70 bg-white/60 p-2 text-[#6a5875] shadow-sm backdrop-blur-xl"
+              className="md:hidden rounded-full border border-white/70 bg-white/60 p-2 text-[#4A3556] shadow-sm backdrop-blur-xl"
               onClick={() => onMenuOpenChange(!menuOpen)}
               aria-label="Menú"
             >
@@ -80,13 +80,13 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden mt-2 px-1">
-            <div className="premium-shell rounded-3xl p-3 space-y-1">
+          <div className="absolute top-16 left-4 right-4 z-50 md:hidden mt-2">
+            <div className="premium-shell rounded-3xl p-3 space-y-1 shadow-xl bg-white/95 backdrop-blur-xl">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="block rounded-2xl px-4 py-3 text-sm text-[#6F5646] transition-colors hover:bg-white hover:text-[#2C2018]"
+                  className="block rounded-2xl px-4 py-3 text-sm text-[#6F5646] transition-colors hover:bg-white/80 hover:text-[#2C2018]"
                   onClick={() => onMenuOpenChange(false)}
                 >
                   {link.label}

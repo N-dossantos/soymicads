@@ -3,7 +3,13 @@
 import { useCurrency } from "@/lib/currency-context";
 
 export default function CurrencyToggle() {
-  const { currency, setCurrency } = useCurrency();
+  const { currency, setCurrency, mounted } = useCurrency();
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center gap-1 rounded-full border border-white/70 bg-white/65 p-1 shadow-sm backdrop-blur-xl h-[34px] w-[96px] opacity-60" />
+    );
+  }
 
   return (
     <div className="flex items-center gap-1 rounded-full border border-white/70 bg-white/65 p-1 shadow-sm backdrop-blur-xl">

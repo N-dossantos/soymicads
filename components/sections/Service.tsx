@@ -16,7 +16,7 @@ const rainbowPseudo = [
 
 
 export default function Service() {
-  const { currency } = useCurrency();
+  const { currency, mounted } = useCurrency();
 
   const sections = [
     {
@@ -161,7 +161,7 @@ export default function Service() {
               <div key={sec.id} id={sec.id === "disenarnos" ? "servicioGrupos" : sec.id === "charlitas" ? "charlitas" : undefined} className="relative">
                 <div className="mb-5 flex items-end justify-between gap-4">
                   <div>
-                    <p className="section-title text-2xl sm:text-3xl font-medium">{sec.id === "disenarme" ? "Diseñar(me) - Individual" : sec.title}</p>
+                    <h3 className="section-title text-2xl sm:text-3xl font-medium">{sec.id === "disenarme" ? "Diseñar(me) - Individual" : sec.title}</h3>
                   </div>
                 </div>
 
@@ -169,7 +169,7 @@ export default function Service() {
                   <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4">
                       <p className="text-sm font-medium text-[#2C2018] mb-3">Temas</p>
-                      <ul className="grid gap-2 text-[13px] text-[#6a5875]">
+                      <ul className="grid gap-2 text-[13px] text-[#4A3556]">
                         {sec.details?.sessions?.map((s, i) => {
                           const m = String(s).match(/^(\d+)\.\s*(.*)$/);
                           const num = m ? m[1] : null;
@@ -187,7 +187,7 @@ export default function Service() {
                     </div>
                     <div className="rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4">
                       <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
-                      <ul className="grid gap-2 text-[13px] text-[#6a5875]">
+                      <ul className="grid gap-2 text-[13px] text-[#4A3556]">
                         {sec.details?.outcomes?.slice(0, 6).map((o, i) => (
                           <li key={i} className="flex gap-2">
                             <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#E8776A]" />
@@ -228,34 +228,52 @@ export default function Service() {
                         <div className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${accent}, rgba(255,255,255,0.95))` }} />
                         <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-3xl" style={{ background: accent }} />
 
-                        <div className="flex items-start gap-4">
-                          <div className="h-14 w-2.5 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.35)]" style={{ background: accent }} />
-                          <div className="flex-1">
-                            <p className="section-kicker mb-1">{it.modal}</p>
-                            <h4 className="text-xl sm:text-2xl font-semibold text-[#2C2018] mb-2 leading-tight">{it.title}</h4>
-                            <p className="text-sm sm:text-[15px] text-[#6a5875] leading-7 max-w-xl">{it.subtitle}</p>
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="flex items-start gap-4 flex-1">
+                            <div className="h-14 w-2.5 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.35)] shrink-0" style={{ background: accent }} />
+                            <div className="min-w-0">
+                              <p className="section-kicker mb-1">{it.modal}</p>
+                              <h4 className="text-xl sm:text-2xl font-semibold text-[#2C2018] mb-2 leading-tight">{it.title}</h4>
+                              <p className="text-sm sm:text-[15px] text-[#4A3556] leading-7 max-w-xl">{it.subtitle}</p>
+                            </div>
                           </div>
-                          <div className="rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-right shadow-sm backdrop-blur-md">
+                          <div className="self-start sm:self-auto rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-left sm:text-right shadow-sm backdrop-blur-md shrink-0 min-w-[100px]">
                             <p className="text-[11px] uppercase tracking-[0.18em] text-[#8a6a84]">Precio</p>
                             <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
-                              {isFreeIntro
-                                ? "Gratis"
-                                : product
-                                ? currency === "ARS"
-                                  ? formatPrice(product.priceARS, "ARS")
-                                  : formatPrice(product.priceEUR, "EUR")
-                                : "—"}
+                              {!mounted ? (
+                                <span className="inline-block h-[28px] w-16 bg-[#2C2018]/10 animate-pulse rounded" />
+                              ) : isFreeIntro ? (
+                                "Gratis"
+                              ) : product ? (
+                                currency === "ARS" ? (
+                                  formatPrice(product.priceARS, "ARS")
+                                ) : (
+                                  formatPrice(product.priceEUR, "EUR")
+                                )
+                              ) : (
+                                "—"
+                              )}
                             </p>
-                            <p className="text-xs text-[#6a5875]">{isFreeIntro ? "Sin costo" : currency === "ARS" ? "ARS" : "EUR"}</p>
+                            <p className="text-xs text-[#4A3556]">
+                              {!mounted ? (
+                                <span className="inline-block h-3 w-8 bg-[#4A3556]/10 animate-pulse rounded" />
+                              ) : isFreeIntro ? (
+                                "Sin costo"
+                              ) : currency === "ARS" ? (
+                                "ARS"
+                              ) : (
+                                "EUR"
+                              )}
+                            </p>
                           </div>
                         </div>
 
-                        <p className="mt-4 text-[14px] sm:text-[15px] leading-7 text-[#6a5875]">{it.desc}</p>
+                        <p className="mt-4 text-[14px] sm:text-[15px] leading-7 text-[#4A3556]">{it.desc}</p>
 
                         {sec.id !== "disenarme" && (it.subtitle.toLowerCase().includes("6 sesiones") || it.title.toLowerCase().includes("proceso")) ? (
                           <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-[linear-gradient(135deg,rgba(242,157,142,0.1),rgba(246,189,139,0.1),rgba(252,229,148,0.08),rgba(161,210,197,0.08),rgba(179,213,238,0.1),rgba(206,175,210,0.1))] p-4">
                             <p className="text-sm font-medium text-[#2C2018] mb-3">Incluye</p>
-                            <ul className="grid gap-2 text-[13px] text-[#6a5875] sm:grid-cols-1">
+                            <ul className="grid gap-2 text-[13px] text-[#4A3556] sm:grid-cols-1">
                               {sessionsList?.map((s, i) => {
                                 const m = String(s).match(/^(\d+)\.\s*(.*)$/);
                                 const num = m ? m[1] : null;
@@ -276,7 +294,7 @@ export default function Service() {
                         {sec.id !== "disenarme" && outcomesList ? (
                           <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4 backdrop-blur-md">
                             <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
-                            <ul className="grid grid-cols-1 gap-2 text-[13px] text-[#6a5875] sm:grid-cols-2">
+                            <ul className="grid grid-cols-1 gap-2 text-[13px] text-[#4A3556] sm:grid-cols-2">
                               {outcomesList.slice(0, 6).map((o, i) => {
                                 return (
                                   <li key={i} className="flex gap-2">
@@ -287,7 +305,7 @@ export default function Service() {
                               })}
                             </ul>
                             {it.id.includes("pareja") ? (
-                              <p className="mt-4 text-xs text-[#6a5875] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
+                              <p className="mt-4 text-xs text-[#4A3556] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
                             ) : null}
                           </div>
                         ) : null}
@@ -295,7 +313,7 @@ export default function Service() {
                         <div className="mt-6 grid gap-3 sm:grid-cols-1">
                           {sec.id === "disenarnos" && it.id.includes("group") ? (
                             <div className="flex flex-col h-full">
-                              <p className="text-md text-[#6a5875] font-bold mb-4">
+                              <p className="text-md text-[#4A3556] font-bold mb-4">
                                 Ésta es una experiencia personalizada...
                               </p>
 
@@ -329,7 +347,7 @@ export default function Service() {
                               </div>
                             </>
                           ) : (
-                            <p className="text-sm text-[#6a5875]">Precio y enlaces próximamente</p>
+                            <p className="text-sm text-[#4A3556]">Precio y enlaces próximamente</p>
                           )}
                         </div>
                       </div>

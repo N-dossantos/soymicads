@@ -1,12 +1,8 @@
 "use client";
 
-interface HeroProps {
-  menuOpen?: boolean;
-}
-
-export default function Hero({ menuOpen }: HeroProps) {
+export default function Hero() {
   return (
-    <section className={`relative pb-20 px-4 sm:px-6 backdrop-blur-sm transition-all duration-300 ${menuOpen ? "pt-80" : "pt-28 sm:pt-32"}`}>
+    <section className="relative pb-20 px-4 sm:px-6 backdrop-blur-sm pt-28 sm:pt-32">
       <div className="absolute inset-x-0 top-0 -z-10 mx-auto h-[680px] max-w-6xl">
         <div className="absolute left-8 top-16 h-64 w-64 rounded-full rainbow-glow" />
         <div className="absolute right-10 top-28 h-72 w-72 rounded-full bg-[rgba(179,213,238,0.2)] blur-3xl" />
@@ -21,7 +17,7 @@ export default function Hero({ menuOpen }: HeroProps) {
             No venís solo a sanar. <br/>Venís a vivir siendo vos.
           </h1>
 
-          <p className="poppins-regular text-[17px] sm:text-[18px] leading-[1.9] text-[#6a5875] max-w-xl mb-8 animate-fade-in">
+          <p className="poppins-regular text-[17px] sm:text-[18px] leading-[1.9] text-[#4A3556] max-w-xl mb-8 animate-fade-in">
             ¿Te sentís raro, apagado, estancado, perdido o con la sensación de que algo no encaja
             aunque "todo esté bien"?
             ¿Sentís que te esforzás por ser de una forma que en el fondo no es tuya? <br/><br/>
@@ -29,8 +25,6 @@ export default function Hero({ menuOpen }: HeroProps) {
             y tu forma única de SER.
           </p>
 
-          <div className="flex flex-wrap gap-3 sm:gap-4 mb-8">
-          </div>
         </div>
 
         <div className="relative lg:pl-6">

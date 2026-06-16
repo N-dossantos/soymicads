@@ -58,7 +58,7 @@ export default function FAQ() {
                   openIndices.includes(i) ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"
                 }`}
               >
-                <p className="text-[14px] sm:text-[15px] text-[#6a5875] leading-[1.85]">
+                <p className="text-[14px] sm:text-[15px] text-[#4A3556] leading-[1.85]">
                   {faq.a}
                 </p>
               </div>

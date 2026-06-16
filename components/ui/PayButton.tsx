@@ -108,11 +108,7 @@ export default function PayButton({
                 <div className="rounded-2xl border border-[rgba(107,79,58,0.14)] bg-white/80 px-4 py-4 text-center">
                   <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Número de Bizum</p>
                   <div className="mt-2 flex items-center justify-center gap-2 text-lg font-semibold text-[#2C2018]">
-                    <img
-                      src="/images/bandera_España.png"
-                      alt="Bandera de España"
-                      className="h-5 w-7 shrink-0 rounded-[2px] border border-[rgba(107,79,58,0.12)] object-cover"
-                    />
+                    <span className="text-xl leading-none" aria-label="España">🇪🇸</span>
                     <span>664 585 365</span>
                   </div>
                   <button

@@ -11,7 +11,7 @@ export default function Footer() {
             Micaela Maria Dos Santos
           </p>
 
-          <p className="mx-auto mb-6 max-w-2xl text-[14px] sm:text-[15px] leading-7 text-[#6a5875]">
+          <p className="mx-auto mb-6 max-w-2xl text-[14px] sm:text-[15px] leading-7 text-[#4A3556]">
             Diseño Humano · Autoconocimiento
           </p>
 

@@ -6,6 +6,7 @@ import type { Currency } from "@/lib/products";
 interface CurrencyContextValue {
   currency: Currency;
   setCurrency: (c: Currency) => void;
+  mounted: boolean;
 }
 
 const STORAGE_KEY = "moodbudita_currency";
@@ -21,21 +22,26 @@ function getInitialCurrency(): Currency {
 const CurrencyContext = createContext<CurrencyContextValue>({
   currency: "EUR",
   setCurrency: () => {},
+  mounted: false,
 });
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrency] = useState<Currency>("EUR");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setCurrency(getInitialCurrency());
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, currency);
-  }, [currency]);
+    if (mounted) {
+      localStorage.setItem(STORAGE_KEY, currency);
+    }
+  }, [currency, mounted]);
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency }}>
+    <CurrencyContext.Provider value={{ currency, setCurrency, mounted }}>
       {children}
     </CurrencyContext.Provider>
   );

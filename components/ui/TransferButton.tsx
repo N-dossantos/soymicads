@@ -5,13 +5,6 @@ import { getProductById, formatPrice } from "@/lib/products";
 import { useCurrency } from "@/lib/currency-context";
 import { Portal } from "@/lib/portal";
 
-const rainbowPseudo = [
-  "relative isolate overflow-hidden",
-  "after:content-[''] after:absolute after:inset-0 after:rounded-full after:z-[-2]",
-  "after:bg-[linear-gradient(90deg,#f29d8e,#f6bd8b,#fce594,#a1d2c5,#b3d5ee,#ceafd2)]",
-  "before:content-[''] before:absolute before:inset-0 before:rounded-full before:z-[-1]",
-  "before:transition-opacity before:duration-200",
-].join(" ");
 
 interface TransferButtonProps {
   productId: string;
@@ -107,7 +100,7 @@ export default function TransferButton({ productId, className = "" }: TransferBu
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className={`${rainbowPseudo} w-full py-2 rounded-full text-sm font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
+        className="w-full py-2.5 rounded-full text-sm font-medium border border-[#C9B9A9]/60 text-[#53392B] bg-white/40 hover:bg-[#F5EEE9]/60 transition-all duration-200"
       >
         Transferencia — {displayPrice}
       </button>

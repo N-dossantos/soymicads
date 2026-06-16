@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main className="relative isolate min-h-screen">
       <Navbar menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
-      <Hero menuOpen={menuOpen} />
+      <Hero />
       <Philosophy />
       <Service />
       <FAQ />
