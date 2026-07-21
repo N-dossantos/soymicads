@@ -6,9 +6,11 @@ import CurrencyToggle from "@/components/ui/CurrencyToggle";
 const NAV_LINKS = [
   { label: "Diseñar(me)", href: "#servicio" },
   { label: "Diseñar(nos)", href: "#servicioGrupos" },
+  { label: "Próximo Taller", href: "#taller" },
   { label: "Charlitas", href: "#charlitas" },
   { label: "Preguntas frecuentes", href: "#preguntas" },
 ];
+
 
 interface NavbarProps {
   menuOpen: boolean;
