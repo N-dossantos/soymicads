@@ -11,7 +11,7 @@ interface EventPopupProps {
 
 export default function EventPopup({
   formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfZnABlaQzVpqgqJZ9hRfBAxYzCOL8V7JdqCqqLEUgrr0anlA/viewform?usp=header",
-  targetSectionId = "taller",
+  targetSectionId = "encuentro",
   deadlineDate = "2026-07-26T10:00:00-03:00",
 }: EventPopupProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -91,7 +91,7 @@ export default function EventPopup({
 
         {/* Header Badge */}
         <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#8a6a84] bg-white/80 border border-white/90 shadow-sm mb-3">
-          <span>✨ ¡Próximo Taller En Vivo!</span>
+          <span>✨ ¡Próximo encuentro gratuito!</span>
         </div>
 
         {/* Title */}
@@ -100,13 +100,18 @@ export default function EventPopup({
         </h3>
 
         {/* Date / Time summary */}
-        <p className="text-xs sm:text-sm font-medium text-[#E8776A] mb-4 flex items-center gap-1.5">
-          <span>📅 Sáb 25 Jul — 10:00 hs (ARG) / 15:00 hs (ESP)</span>
-        </p>
+        <div className="mb-4">
+          <p className="text-xs sm:text-sm font-medium text-[#E8776A] flex items-center gap-1.5">
+            <span>📅 Sáb 25 Jul — 10:00 hs (ARG) / 15:00 hs (ESP)</span>
+          </p>
+          <p className="text-xs font-semibold text-[#8a6a84] mt-1 flex items-center gap-1">
+            <span>💻 Evento online a través de Zoom</span>
+          </p>
+        </div>
 
         {/* Description preview */}
         <p className="text-xs sm:text-sm text-[#4A3556] leading-relaxed mb-6">
-          Inscríbete y completa los datos de tu carta natal. Si te anotás a tiempo, ¡te armo y envío tu carta personalizada!
+          Inscríbete y completa los datos de tu bodygraph. Si te anotás a tiempo, ¡te armo y envío tu carta personalizada!
         </p>
 
         {/* Action Buttons */}
