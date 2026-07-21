@@ -10,9 +10,9 @@ interface EventPopupProps {
 }
 
 export default function EventPopup({
-  formsUrl = "https://forms.google.com/REEMPLAZAR_CON_TU_LINK_DE_GOOGLE_FORMS",
+  formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfZnABlaQzVpqgqJZ9hRfBAxYzCOL8V7JdqCqqLEUgrr0anlA/viewform?usp=header",
   targetSectionId = "taller",
-  deadlineDate = "2026-07-15T10:00:00-03:00",
+  deadlineDate = "2026-07-26T10:00:00-03:00",
 }: EventPopupProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isActiveClass, setIsActiveClass] = useState(false);
@@ -70,17 +70,15 @@ export default function EventPopup({
   return (
     <div
       aria-live="polite"
-      className={`event-popup-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-all duration-300 ${
-        isActiveClass ? "active opacity-100 visible" : "opacity-0 invisible pointer-events-none"
-      }`}
+      className={`event-popup-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-all duration-300 ${isActiveClass ? "active opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+        }`}
       onClick={(e) => {
         if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div
-        className={`event-popup-card relative w-full max-w-lg rounded-3xl p-6 sm:p-8 bg-[#fdf7f2]/95 backdrop-blur-2xl border border-white/80 shadow-2xl transition-all duration-300 transform ${
-          isActiveClass ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
-        }`}
+        className={`event-popup-card relative w-full max-w-lg rounded-3xl p-6 sm:p-8 bg-[#fdf7f2]/95 backdrop-blur-2xl border border-white/80 shadow-2xl transition-all duration-300 transform ${isActiveClass ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
+          }`}
       >
         {/* Close button */}
         <button
@@ -103,7 +101,7 @@ export default function EventPopup({
 
         {/* Date / Time summary */}
         <p className="text-xs sm:text-sm font-medium text-[#E8776A] mb-4 flex items-center gap-1.5">
-          <span>📅 Sáb 15 Jul — 10:00 hs (ARG) / 15:00 hs (ESP)</span>
+          <span>📅 Sáb 25 Jul — 10:00 hs (ARG) / 15:00 hs (ESP)</span>
         </p>
 
         {/* Description preview */}

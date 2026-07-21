@@ -38,7 +38,7 @@ export default function EventSection({
 
           {/* Date & Time Badge */}
           <div className="mx-auto max-w-fit rounded-2xl bg-white/80 border border-[rgba(107,79,58,0.12)] px-5 py-3 shadow-sm mb-6 text-sm sm:text-base font-medium text-[#4A3556]">
-            <span className="text-[#E8776A] font-semibold">📅 Sábado 15 de Julio</span> — 10:00 hs (Argentina) / 15:00 hs (España)
+            <span className="text-[#E8776A] font-semibold">📅 Sábado 25 de Julio</span> — 10:00 hs (Argentina) / 15:00 hs (España)
           </div>
 
           {/* Description */}
