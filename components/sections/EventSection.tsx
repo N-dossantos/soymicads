@@ -48,7 +48,8 @@ export default function EventSection({
 
             {/* Description */}
             <p className="mx-auto max-w-lg text-[15px] leading-relaxed text-[#4A3556] mb-8">
-              Gracias a todos los que formaron parte de esta edición. <br>¡Fue un encuentro hermoso!</br>
+              Gracias a todos los que formaron parte de esta edición. 
+              <br/><br/>¡Fue un encuentro hermoso!
             </p>
 
             {/* Call to action button */}
