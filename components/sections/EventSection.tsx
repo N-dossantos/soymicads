@@ -28,18 +28,18 @@ export default function EventSection({
           {/* Badge */}
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#8a6a84] bg-white/70 border border-white/80 shadow-sm mb-6">
             <span className="h-2 w-2 rounded-full bg-[#E8776A] animate-pulse" />
-            Próximo encuentro gratuito
+            Próximamente
           </div>
 
           {/* Title */}
           <h2 className="section-title text-[clamp(32px,5vw,56px)] font-medium leading-tight mb-4 text-[#2C2018]">
-            Aprender a Diseñar(nos)
+            Aprender a Diseñar(nos) II
           </h2>
 
           {/* Date & Time Badge */}
           <div className="mx-auto max-w-fit rounded-2xl bg-white/80 border border-[rgba(107,79,58,0.12)] px-5 py-3 shadow-sm mb-6 text-sm sm:text-base font-medium text-[#4A3556]">
             <div>
-              <span className="text-[#E8776A] font-semibold">📅 Sábado 25 de Julio</span> — 10:00 hs (Argentina) / 15:00 hs (España)
+              <span className="text-[#E8776A] font-semibold">📅 Fecha a confirmar</span>
             </div>
             <div className="mt-1.5 text-xs sm:text-sm text-[#8a6a84] font-semibold flex items-center justify-center gap-1.5">
               <span>💻 Evento online a través de Zoom</span>
@@ -48,9 +48,9 @@ export default function EventSection({
 
           {/* Description */}
           <p className="mx-auto max-w-2xl text-[15px] sm:text-[17px] leading-relaxed text-[#4A3556] mb-8">
-            Inscríbete y completa los datos de tu bodygraph. <br className="hidden sm:inline" />
+            ¡Se viene la segunda edición de <strong>Aprender a Diseñar(nos)</strong>! <br className="hidden sm:inline" />
             <span className="font-medium text-[#2C2018]">
-              (Inscripciones abiertas: si te anotás hasta el 23, te hago tu carta personalizada y te la envío).
+              Anotate en la lista de espera para ser de los primeros en enterarte cuando abramos las inscripciones.
             </span>
           </p>
 
@@ -62,7 +62,7 @@ export default function EventSection({
               rel="noopener noreferrer"
               className={`${rainbowPseudo} py-4 px-8 rounded-full text-base font-medium text-[#53392B] border border-[#C9B9A9] shadow-md hover:shadow-lg hover:scale-105 active:scale-100 before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
             >
-              Inscribirme al encuentro →
+              Anotarme en lista de espera →
             </a>
           </div>
         </div>

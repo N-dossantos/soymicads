@@ -8,7 +8,6 @@ import EventSection from "@/components/sections/EventSection";
 import Service from "@/components/sections/Service";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
-import EventPopup from "@/components/ui/EventPopup";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,11 +17,10 @@ export default function Home() {
       <Navbar menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
       <Hero menuOpen={menuOpen} />
       <Philosophy />
-      <EventSection />
       <Service />
+      <EventSection />
       <FAQ />
       <Footer />
-      <EventPopup />
     </main>
   );
 }
