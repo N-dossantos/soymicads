@@ -20,51 +20,92 @@ export default function EventSection({
       {/* Background soft ambient glows */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-[radial-gradient(circle,_rgba(242,157,142,0.25)_0%,_rgba(206,175,210,0.2)_50%,_transparent_70%)] blur-3xl pointer-events-none" />
 
-      <div className="mx-auto max-w-4xl relative">
-        <div className="rainbow-surface relative overflow-hidden rounded-[2.5rem] p-8 sm:p-12 text-center border border-white/60 shadow-2xl backdrop-blur-xl">
-          {/* Top subtle bar gradient */}
-          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#f29d8e] via-[#f6bd8b] via-[#fce594] via-[#a1d2c5] via-[#b3d5ee] to-[#ceafd2]" />
+      <div className="mx-auto max-w-6xl relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          
+          {/* Card 1: Aprender a Diseñar(nos) - Realizado */}
+          <div className="rainbow-surface relative overflow-hidden rounded-[2.5rem] p-8 sm:p-10 text-center border border-white/60 shadow-xl backdrop-blur-xl opacity-90 transition hover:opacity-100 hover:scale-[1.02] duration-300">
+            {/* Top subtle bar gradient */}
+            <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#f29d8e] via-[#f6bd8b] via-[#fce594] via-[#a1d2c5] via-[#b3d5ee] to-[#ceafd2] opacity-60" />
 
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#8a6a84] bg-white/70 border border-white/80 shadow-sm mb-6">
-            <span className="h-2 w-2 rounded-full bg-[#E8776A] animate-pulse" />
-            Próximamente
-          </div>
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#8a6a84] bg-white/70 border border-white/80 shadow-sm mb-6">
+              <span className="h-2 w-2 rounded-full bg-gray-400" />
+              Edición Realizada
+            </div>
 
-          {/* Title */}
-          <h2 className="section-title text-[clamp(32px,5vw,56px)] font-medium leading-tight mb-4 text-[#2C2018]">
-            Aprender a Diseñar(nos) II
-          </h2>
+            {/* Title */}
+            <h2 className="section-title text-[clamp(28px,4vw,40px)] font-medium leading-tight mb-4 text-[#2C2018]">
+              Aprender a Diseñar(nos)
+            </h2>
 
-          {/* Date & Time Badge */}
-          <div className="mx-auto max-w-fit rounded-2xl bg-white/80 border border-[rgba(107,79,58,0.12)] px-5 py-3 shadow-sm mb-6 text-sm sm:text-base font-medium text-[#4A3556]">
+            {/* Date & Time Badge */}
+            <div className="mx-auto max-w-fit rounded-2xl bg-white/60 border border-[rgba(107,79,58,0.12)] px-4 py-2 shadow-sm mb-6 text-sm font-medium text-[#4A3556]">
+              <div>
+                <span className="text-[#8a6a84] font-semibold">📅 Sábado 25 de Julio de 2026</span>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="mx-auto max-w-lg text-[15px] leading-relaxed text-[#4A3556] mb-8">
+              Gracias a todos los que formaron parte de esta edición. ¡Fue un encuentro hermoso!
+            </p>
+
+            {/* Call to action button */}
             <div>
-              <span className="text-[#E8776A] font-semibold">📅 Fecha a confirmar</span>
-            </div>
-            <div className="mt-1.5 text-xs sm:text-sm text-[#8a6a84] font-semibold flex items-center justify-center gap-1.5">
-              <span>💻 Evento online a través de Zoom</span>
+              <div className="inline-block py-3 px-6 rounded-full text-sm font-medium text-[#4A3556] bg-white/40 border border-[#C9B9A9]/40 shadow-sm cursor-default">
+                ✨ Finalizado
+              </div>
             </div>
           </div>
 
-          {/* Description */}
-          <p className="mx-auto max-w-2xl text-[15px] sm:text-[17px] leading-relaxed text-[#4A3556] mb-8">
-            ¡Se viene la segunda edición de <strong>Aprender a Diseñar(nos)</strong>! <br className="hidden sm:inline" />
-            <span className="font-medium text-[#2C2018]">
-              Anotate en la lista de espera para ser de los primeros en enterarte cuando abramos las inscripciones.
-            </span>
-          </p>
+          {/* Card 2: Aprender a Diseñar(nos) II - Próximamente */}
+          <div className="rainbow-surface relative overflow-hidden rounded-[2.5rem] p-8 sm:p-10 text-center border border-white/60 shadow-2xl backdrop-blur-xl transform lg:scale-105 z-10 transition hover:scale-[1.07] duration-300">
+            {/* Top subtle bar gradient */}
+            <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#f29d8e] via-[#f6bd8b] via-[#fce594] via-[#a1d2c5] via-[#b3d5ee] to-[#ceafd2]" />
 
-          {/* Call to action button */}
-          <div>
-            <a
-              href={formsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${rainbowPseudo} py-4 px-8 rounded-full text-base font-medium text-[#53392B] border border-[#C9B9A9] shadow-md hover:shadow-lg hover:scale-105 active:scale-100 before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
-            >
-              Anotarme en lista de espera →
-            </a>
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#8a6a84] bg-white/70 border border-white/80 shadow-sm mb-6">
+              <span className="h-2 w-2 rounded-full bg-[#E8776A] animate-pulse" />
+              Próximamente
+            </div>
+
+            {/* Title */}
+            <h2 className="section-title text-[clamp(28px,4vw,48px)] font-medium leading-tight mb-4 text-[#2C2018]">
+              Aprender a Diseñar(nos) II
+            </h2>
+
+            {/* Date & Time Badge */}
+            <div className="mx-auto max-w-fit rounded-2xl bg-white/80 border border-[rgba(107,79,58,0.12)] px-5 py-3 shadow-sm mb-6 text-sm sm:text-base font-medium text-[#4A3556]">
+              <div>
+                <span className="text-[#E8776A] font-semibold">📅 Fecha a confirmar</span>
+              </div>
+              <div className="mt-1.5 text-xs sm:text-sm text-[#8a6a84] font-semibold flex items-center justify-center gap-1.5">
+                <span>💻 Evento online a través de Zoom</span>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="mx-auto max-w-lg text-[15px] sm:text-[16px] leading-relaxed text-[#4A3556] mb-8">
+              ¡Se viene la segunda edición de <strong>Aprender a Diseñar(nos)</strong>! <br className="hidden sm:inline" />
+              <span className="font-medium text-[#2C2018]">
+                Anotate en la lista de espera para ser de los primeros en enterarte cuando abramos las inscripciones.
+              </span>
+            </p>
+
+            {/* Call to action button */}
+            <div>
+              <a
+                href={formsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${rainbowPseudo} py-3.5 px-7 rounded-full text-[15px] font-medium text-[#53392B] border border-[#C9B9A9] shadow-md hover:shadow-lg hover:scale-105 active:scale-100 before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
+              >
+                Anotarme en lista de espera →
+              </a>
+            </div>
           </div>
+
         </div>
       </div>
     </section>

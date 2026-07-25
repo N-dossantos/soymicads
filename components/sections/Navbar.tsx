@@ -6,8 +6,8 @@ import CurrencyToggle from "@/components/ui/CurrencyToggle";
 const NAV_LINKS = [
   { label: "Diseñar(me)", href: "#servicio" },
   { label: "Diseñar(nos)", href: "#servicioGrupos" },
-  { label: "Encuentros", href: "#encuentro" },
   { label: "Charlitas", href: "#charlitas" },
+  { label: "Encuentros", href: "#encuentro" },
   { label: "Preguntas frecuentes", href: "#preguntas" },
 ];
 
