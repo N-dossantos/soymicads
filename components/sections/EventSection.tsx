@@ -5,7 +5,7 @@ interface EventSectionProps {
 }
 
 export default function EventSection({
-  formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfZnABlaQzVpqgqJZ9hRfBAxYzCOL8V7JdqCqqLEUgrr0anlA/viewform?usp=header",
+  formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeTqXxxToZobg4P1BE1atDH9LWyevtd7YAncRicecbPfwO14A/viewform?usp=publish-editor",
 }: EventSectionProps) {
   const rainbowPseudo = [
     "relative isolate overflow-hidden inline-flex items-center justify-center transition-all duration-300",
@@ -48,7 +48,7 @@ export default function EventSection({
 
             {/* Description */}
             <p className="mx-auto max-w-lg text-[15px] leading-relaxed text-[#4A3556] mb-8">
-              Gracias a todos los que formaron parte de esta edición. ¡Fue un encuentro hermoso!
+              Gracias a todos los que formaron parte de esta edición. <br>¡Fue un encuentro hermoso!
             </p>
 
             {/* Call to action button */}
@@ -71,7 +71,7 @@ export default function EventSection({
             </div>
 
             {/* Title */}
-            <h2 className="section-title text-[clamp(28px,4vw,48px)] font-medium leading-tight mb-4 text-[#2C2018]">
+            <h2 className="section-title text-[clamp(28px,4vw,44px)] font-medium leading-tight mb-4 text-[#2C2018]">
               Aprender a Diseñar(nos) II
             </h2>
 
