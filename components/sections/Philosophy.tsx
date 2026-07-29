@@ -11,7 +11,8 @@ export default function Philosophy() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.46),_transparent_55%)]" />
 
           <div className="relative mx-auto max-w-3xl">
-            <p className="section-kicker mb-4 text-white/90">valores</p>
+            <h2 className="sr-only">Valores</h2>
+            <p className="section-kicker mb-4 text-white/90" aria-hidden="true">valores</p>
             <blockquote className="font-serif text-[clamp(30px,4.5vw,54px)] leading-[1.16] font-light italic tracking-tight mb-5 text-[#2C2018]">
               Un espacio basado en Diseño Humano y experimentación real
             </blockquote>

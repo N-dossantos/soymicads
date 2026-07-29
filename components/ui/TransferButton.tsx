@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { getProductById, formatPrice } from "@/lib/products";
 import { useCurrency } from "@/lib/currency-context";
 import { Portal } from "@/lib/portal";
+import { useDialogA11y } from "@/lib/useDialogA11y";
 
 
 interface TransferButtonProps {
@@ -16,24 +17,16 @@ export default function TransferButton({ productId, className = "" }: TransferBu
   const [copiedField, setCopiedField] = useState<"cbu" | "alias" | "iban" | "beneficiario" | "full" | null>(null);
   const [open, setOpen] = useState(false);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+
+  const closeDialog = () => setOpen(false);
+  useDialogA11y(open, dialogRef, closeDialog);
 
   useEffect(() => {
-    if (!open) return;
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      if (copyTimeoutRef.current) {
-        clearTimeout(copyTimeoutRef.current);
-        copyTimeoutRef.current = null;
-      }
-    };
+    if (open || !copyTimeoutRef.current) return;
+    clearTimeout(copyTimeoutRef.current);
+    copyTimeoutRef.current = null;
   }, [open]);
 
   const product = getProductById(productId);
@@ -100,7 +93,7 @@ export default function TransferButton({ productId, className = "" }: TransferBu
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className="w-full py-2.5 rounded-full text-sm font-medium border border-[#C9B9A9]/60 text-[#53392B] bg-white/40 hover:bg-[#F5EEE9]/60 transition-all duration-200"
+        className="min-h-[44px] flex items-center justify-center w-full py-2.5 rounded-full text-sm font-medium border border-[#C9B9A9]/60 text-[#53392B] bg-white/40 hover:bg-[#F5EEE9]/60 transition-all duration-200"
       >
         Transferencia — {displayPrice}
       </button>
@@ -108,25 +101,26 @@ export default function TransferButton({ productId, className = "" }: TransferBu
       {open ? (
         <Portal>
           <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/20 p-2 sm:p-4 backdrop-blur-sm">
-            <button
-              type="button"
-              aria-label="Cerrar tarjeta de transferencia"
-              onClick={() => setOpen(false)}
-              className="absolute inset-0"
-            />
+            <div aria-hidden="true" onClick={closeDialog} className="absolute inset-0" />
 
-            <div className="relative z-10 w-full max-w-md sm:max-w-lg max-h-[90dvh] overflow-y-auto rounded-2xl sm:rounded-[2rem] border border-[#D8C8B9] bg-[#FFF9F4] p-4 sm:p-6 shadow-[0_28px_80px_rgba(44,32,24,0.28)] space-y-4 sm:space-y-5">
+            <div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={titleId}
+              className="relative z-10 w-full max-w-md sm:max-w-lg max-h-[90dvh] overflow-y-auto rounded-2xl sm:rounded-[2rem] border border-[#D8C8B9] bg-[#FFF9F4] p-4 sm:p-6 shadow-[0_28px_80px_rgba(44,32,24,0.28)] space-y-4 sm:space-y-5"
+            >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#8C6A56] mb-1">Datos bancarios</p>
+                  <p id={titleId} className="text-xs uppercase tracking-[0.18em] text-[#8C6A56] mb-1">Datos bancarios</p>
                   <p className="text-sm font-medium text-[#2C2018] truncate">{headerHolderName}</p>
                   <p className="text-xs text-[#7A6A5A]">{headerBankName}</p>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => setOpen(false)}
-                  className="shrink-0 rounded-full border border-[#C9B9A9] px-3 py-1 text-xs font-medium text-[#53392B] hover:bg-white transition"
+                  onClick={closeDialog}
+                  className="shrink-0 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-1 text-xs font-medium text-[#53392B] hover:bg-white transition"
                 >
                   Cerrar
                 </button>
@@ -136,24 +130,24 @@ export default function TransferButton({ productId, className = "" }: TransferBu
                 {currency === "ARS" ? (
                   <>
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">CBU</p>
+                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">CBU</p>
                       <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsARS.cbu}</p>
                       <button
                         type="button"
                         onClick={() => copyToClipboard("CBU", bankDetailsARS.cbu)}
-                        className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
                       >
                         {copiedField === "cbu" ? "¡Copiado!" : "Copiar CBU"}
                       </button>
                     </div>
 
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Alias</p>
+                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">Alias</p>
                       <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsARS.alias}</p>
                       <button
                         type="button"
                         onClick={() => copyToClipboard("alias", bankDetailsARS.alias)}
-                        className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
                       >
                         {copiedField === "alias" ? "¡Copiado!" : "Copiar alias"}
                       </button>
@@ -162,29 +156,29 @@ export default function TransferButton({ productId, className = "" }: TransferBu
                 ) : (
                   <>
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">IBAN</p>
+                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">IBAN</p>
                       <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsEUR.iban}</p>
                       <button
                         type="button"
                         onClick={() => copyToClipboard("IBAN", bankDetailsEUR.iban)}
-                        className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
                       >
                         {copiedField === "iban" ? "¡Copiado!" : "Copiar IBAN"}
                       </button>
                     </div>
 
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">BIC</p>
+                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">BIC</p>
                       <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsEUR.bic}</p>
                     </div>
 
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Beneficiario</p>
+                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">Beneficiario</p>
                       <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsEUR.beneficiario}</p>
                       <button
                         type="button"
                         onClick={() => copyToClipboard("beneficiario", bankDetailsEUR.beneficiario)}
-                        className="mt-2 rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
                       >
                         {copiedField === "beneficiario" ? "¡Copiado!" : "Copiar beneficiario"}
                       </button>
@@ -194,14 +188,14 @@ export default function TransferButton({ productId, className = "" }: TransferBu
               </div>
 
               <div className="rounded-2xl bg-[#F8F1EB] p-4 space-y-2">
-                <p className="text-[11px] uppercase tracking-[0.16em] text-[#8C6A56]">Importe a transferir</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">Importe a transferir</p>
                 <p className="text-lg font-semibold text-[#2C2018]">{displayPrice}</p>
               </div>
 
                 <button
                   type="button"
                   onClick={copyBankDetails}
-                  className="w-full rounded-full bg-[#2C2018] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#3B2A20] transition"
+                  className="min-h-[44px] flex items-center justify-center w-full rounded-full bg-[#2C2018] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#3B2A20] transition"
                 >
                   {copiedField === "full" ? "¡Datos copiados!" : "Copiar datos completos y monto"}
                 </button>
@@ -211,7 +205,7 @@ export default function TransferButton({ productId, className = "" }: TransferBu
                   <a
                     href={`/pago-en-proceso/transferencia?product=${encodeURIComponent(productId)}`}
                     onClick={() => setOpen(false)}
-                    className="block w-full text-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                    className="min-h-[44px] flex items-center justify-center w-full text-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
                   >
                     Enviar comprobante / Continuar →
                   </a>

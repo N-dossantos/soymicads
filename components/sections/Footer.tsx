@@ -31,14 +31,14 @@ export default function Footer() {
                 }
                 target={index === 0 || index === 1 ? "_blank" : undefined}
                 rel={index === 0 || index === 1 ? "noopener noreferrer" : undefined}
-                className="rounded-full border border-[rgba(255,255,255,0.55)] bg-[linear-gradient(90deg,rgba(242,157,142,0.16),rgba(246,189,139,0.16),rgba(252,229,148,0.16),rgba(161,210,197,0.16),rgba(179,213,238,0.16),rgba(206,175,210,0.16))] px-4 py-2 text-sm text-[#3f352d] transition hover:-translate-y-0.5 hover:bg-white/90"
+                className="min-h-[44px] inline-flex items-center justify-center rounded-full border border-[rgba(255,255,255,0.55)] bg-[linear-gradient(90deg,rgba(242,157,142,0.16),rgba(246,189,139,0.16),rgba(252,229,148,0.16),rgba(161,210,197,0.16),rgba(179,213,238,0.16),rgba(206,175,210,0.16))] px-4 py-2 text-sm text-[#3f352d] transition hover:-translate-y-0.5 hover:bg-white/90"
               >
                 {label}
               </a>
             ))}
           </div>
 
-          <p className="text-[11px] tracking-[0.16em] text-[#8a6a84] uppercase">
+          <p className="text-xs tracking-[0.16em] text-[#7a5a72] uppercase">
             © {new Date().getFullYear()} Soymicads · Todos los derechos reservados
           </p>
         </div>

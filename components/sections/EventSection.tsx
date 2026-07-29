@@ -29,7 +29,7 @@ export default function EventSection({
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#f29d8e] via-[#f6bd8b] via-[#fce594] via-[#a1d2c5] via-[#b3d5ee] to-[#ceafd2] opacity-60" />
 
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#8a6a84] bg-white/70 border border-white/80 shadow-sm mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#7a5a72] bg-white/70 border border-white/80 shadow-sm mb-6">
               <span className="h-2 w-2 rounded-full bg-gray-400" />
               Edición Realizada
             </div>
@@ -42,7 +42,7 @@ export default function EventSection({
             {/* Date & Time Badge */}
             <div className="mx-auto max-w-fit rounded-2xl bg-white/60 border border-[rgba(107,79,58,0.12)] px-4 py-2 shadow-sm mb-6 text-sm font-medium text-[#4A3556]">
               <div>
-                <span className="text-[#8a6a84] font-semibold">📅 Sábado 25 de Julio de 2026</span>
+                <span className="text-[#7a5a72] font-semibold">📅 Sábado 25 de Julio de 2026</span>
               </div>
             </div>
 
@@ -66,7 +66,7 @@ export default function EventSection({
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#f29d8e] via-[#f6bd8b] via-[#fce594] via-[#a1d2c5] via-[#b3d5ee] to-[#ceafd2]" />
 
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#8a6a84] bg-white/70 border border-white/80 shadow-sm mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#7a5a72] bg-white/70 border border-white/80 shadow-sm mb-6">
               <span className="h-2 w-2 rounded-full bg-[#E8776A] animate-pulse" />
               Próximamente
             </div>
@@ -81,7 +81,7 @@ export default function EventSection({
               <div>
                 <span className="text-[#E8776A] font-semibold">📅 Fecha a confirmar</span>
               </div>
-              <div className="mt-1.5 text-xs sm:text-sm text-[#8a6a84] font-semibold flex items-center justify-center gap-1.5">
+              <div className="mt-1.5 text-xs sm:text-sm text-[#7a5a72] font-semibold flex items-center justify-center gap-1.5">
                 <span>💻 Evento online a través de Zoom</span>
               </div>
             </div>

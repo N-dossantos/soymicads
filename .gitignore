@@ -46,4 +46,7 @@ node_modules/
 .context/
 
 /.gemini
+/.claude
 
+CLAUDE.md
+GEMINI.md

@@ -42,7 +42,7 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
             />
             <span className="flex flex-col leading-none">
               <span className="rainbow-text font-serif text-[1.05rem] font-medium">Mica Ds</span>
-              <span className="hidden min-[380px]:block text-[11px] uppercase tracking-[0.18em] text-[#8a6a84]">Diseño humano</span>
+              <span className="hidden min-[380px]:block text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Diseño humano</span>
             </span>
           </a>
 
@@ -61,9 +61,11 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
           <div className="flex items-center gap-2 min-[360px]:gap-3">
             <CurrencyToggle />
             <button
-              className="md:hidden rounded-full border border-white/70 bg-white/60 p-2 text-[#4A3556] shadow-sm backdrop-blur-xl"
+              className="md:hidden flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/60 text-[#4A3556] shadow-sm backdrop-blur-xl"
               onClick={() => onMenuOpenChange(!menuOpen)}
               aria-label="Menú"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
                 {menuOpen ? (
@@ -82,7 +84,7 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="absolute top-16 left-4 right-4 z-50 md:hidden mt-2">
+          <div id="mobile-menu" className="absolute top-16 left-4 right-4 z-50 md:hidden mt-2">
             <div className="premium-shell rounded-3xl p-3 space-y-1 shadow-xl bg-white/95 backdrop-blur-xl">
               {NAV_LINKS.map((link) => (
                 <a

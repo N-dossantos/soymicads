@@ -238,7 +238,7 @@ export default function Service() {
                             </div>
                           </div>
                           <div className="self-start sm:self-auto rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-left sm:text-right shadow-sm backdrop-blur-md shrink-0 min-w-[100px]">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-[#8a6a84]">Precio</p>
+                            <p className="text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Precio</p>
                             <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
                               {!mounted ? (
                                 <span className="inline-block h-[28px] w-16 bg-[#2C2018]/10 animate-pulse rounded" />

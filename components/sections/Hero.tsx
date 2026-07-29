@@ -54,14 +54,14 @@ export default function Hero({ menuOpen }: HeroProps) {
                 >
                   <div className="flex items-center justify-between gap-4 w-full">
                     <div className="w-full">
-                      <p className="text-[11px] uppercase tracking-[0.18em] text-[#8a6a84]">
+                      <p className="text-xs uppercase tracking-[0.18em] text-[#7a5a72]">
                         {item.label}
                       </p>
 
                       <p className="mt-1 flex items-center justify-between text-sm font-medium text-[#2C2018] w-full">
                         <span>{item.value}</span>
 
-                        <span className="ml-2 shrink-0 flex items-center justify-center w-7 h-7 rounded-full border border-[rgba(107,79,58,0.18)] text-[#8a6a84] text-sm transition-all duration-300 group-hover:border-[#8a6a84] group-hover:bg-white/60 group-hover:-translate-y-0.5">
+                        <span className="ml-2 shrink-0 flex items-center justify-center w-7 h-7 rounded-full border border-[rgba(107,79,58,0.18)] text-[#7a5a72] text-sm transition-all duration-300 group-hover:border-[#7a5a72] group-hover:bg-white/60 group-hover:-translate-y-0.5">
                           ↓
                         </span>
                       </p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 
 const FAQS = [
   {
@@ -23,6 +23,7 @@ const FAQS = [
 
 export default function FAQ() {
   const [openIndices, setOpenIndices] = useState<number[]>([]);
+  const baseId = useId();
 
   return (
     <section id="preguntas" className="relative py-24 px-4 sm:px-6">
@@ -32,38 +33,52 @@ export default function FAQ() {
         </div>
 
         <div className="premium-card divide-y divide-[rgba(255,255,255,0.5)] overflow-hidden rounded-[1.75rem]">
-          {FAQS.map((faq, i) => (
-            <div key={i} className="px-5 py-5 sm:px-6">
-              <button
-                onClick={() =>
-                  setOpenIndices((prev) => (prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]))
-                }
-                className="w-full flex justify-between items-start gap-4 text-left group premium-focus"
-                aria-expanded={openIndices.includes(i)}
-              >
-                <span className="text-[15px] sm:text-[16px] font-medium text-[#2C2018] group-hover:text-[#8a6a84] transition-colors leading-snug">
-                  {faq.q}
-                </span>
-                <span
-                  className={`text-[#8a6a84] text-xl leading-none flex-shrink-0 transition-transform duration-200 ${
-                    openIndices.includes(i) ? "rotate-90" : ""
+          {FAQS.map((faq, i) => {
+            const isOpen = openIndices.includes(i);
+            const questionId = `${baseId}-question-${i}`;
+            const answerId = `${baseId}-answer-${i}`;
+
+            return (
+              <div key={i} className="px-5 py-5 sm:px-6">
+                <button
+                  id={questionId}
+                  onClick={() =>
+                    setOpenIndices((prev) => (prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]))
+                  }
+                  className="w-full flex justify-between items-start gap-4 text-left group premium-focus"
+                  aria-expanded={isOpen}
+                  aria-controls={answerId}
+                >
+                  <span className="text-[15px] sm:text-[16px] font-medium text-[#2C2018] group-hover:text-[#7a5a72] transition-colors leading-snug">
+                    {faq.q}
+                  </span>
+                  <span
+                    className={`text-[#7a5a72] text-xl leading-none flex-shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-90" : ""
+                    }`}
+                  >
+                    ›
+                  </span>
+                </button>
+
+                <div
+                  id={answerId}
+                  role="region"
+                  aria-labelledby={questionId}
+                  aria-hidden={!isOpen}
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+                    isOpen ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
                   }`}
                 >
-                  ›
-                </span>
-              </button>
-
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  openIndices.includes(i) ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"
-                }`}
-              >
-                <p className="text-[14px] sm:text-[15px] text-[#4A3556] leading-[1.85]">
-                  {faq.a}
-                </p>
+                  <div className="overflow-hidden">
+                    <p className="text-[14px] sm:text-[15px] text-[#4A3556] leading-[1.85]">
+                      {faq.a}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

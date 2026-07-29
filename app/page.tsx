@@ -13,7 +13,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <main className="relative isolate min-h-screen overflow-x-hidden">
+    <main id="main-content" className="relative isolate min-h-screen overflow-x-hidden">
       <Navbar menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
       <Hero menuOpen={menuOpen} />
       <Philosophy />

@@ -141,8 +141,8 @@ body::before {
 .section-kicker {
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  font-size: 0.72rem;
-  color: #8a6a84;
+  font-size: 0.75rem;
+  color: #7a5a72;
 }
 
 .section-title {
@@ -198,6 +198,16 @@ body::before {
   outline-offset: 2px;
 }
 
+/* Mobile touch polish: kill the ~300ms tap delay and the default gray
+   flash on tap, since every interactive element already has its own
+   hover/active styles that would otherwise clash with it. */
+a,
+button,
+[role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Event Popup Overlay & Card Transitions */
 .event-popup-overlay {
   position: fixed;
@@ -228,5 +238,17 @@ body::before {
 
 .event-popup-overlay.active .event-popup-card {
   transform: scale(1) translateY(0);
+}
+
+/* Respect prefers-reduced-motion: let animations/transitions resolve to their end state instantly instead of removing them (which would leave fade-ins stuck at opacity 0) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 

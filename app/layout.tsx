@@ -42,6 +42,12 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning className={`${cormorant.variable} ${dmSans.variable}`}>
       <body>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-[#2C2018] focus:px-5 focus:py-3 focus:text-sm focus:font-medium focus:text-white focus:shadow-lg"
+        >
+          Saltar al contenido principal
+        </a>
         <CurrencyProvider>{children}</CurrencyProvider>
       </body>
     </html>
