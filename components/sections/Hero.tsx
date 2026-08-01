@@ -42,9 +42,11 @@ export default function Hero({ menuOpen }: HeroProps) {
 
             <div className="grid gap-3">
               {[
-                { label: "Individual", value: "Diseñar (me)", href: "#servicio" },
-                { label: "Relaciones", value: "Diseñar (nos)", href: "#servicioGrupos" },
-                { label: "Otros", value: "Charlitas", href: "#charlitas" },
+                { label: "Encuentro gratuito", value:"Aprender a Diseñar(nos)", href: "#encuentro"},
+                { label: "Empezá por acá", value: "Exploración gratuita", href: "#exploracion" },
+                { label: "Para vos", value: "Diseñar (me) - Individual 1:1", href: "#disenarme" },
+                { label: "Para vos con otros", value: "Diseñar (nos) - Relaciones", href: "#disenarnos" },
+                { label: "Extra", value: "Charlitas desde mi mirada", href: "#charlitas" },
               ].map((item, index) => (
                 <a
                   key={item.label}

@@ -13,12 +13,13 @@ function buildMailto(productTitle?: string, amount?: string) {
   return `mailto:soymicads@gmail.com?subject=${subject}&body=${body}`;
 }
 
-export default function PagoEnProcesoTransferenciaPage({
+export default async function PagoEnProcesoTransferenciaPage({
   searchParams,
 }: {
-  searchParams?: { product?: string };
+  searchParams?: Promise<{ product?: string }>;
 }) {
-  const productId = searchParams?.product;
+  const resolvedParams = searchParams ? await searchParams : undefined;
+  const productId = resolvedParams?.product;
   const product = productId ? getProductById(productId) : undefined;
   const continueHref = productId ? `/gracias?product=${encodeURIComponent(productId)}` : "/gracias";
 

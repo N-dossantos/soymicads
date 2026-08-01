@@ -20,37 +20,49 @@ export default function Service() {
 
   const sections = [
     {
+      id: "exploracion",
+      title: "Exploración",
+      items: [
+        {
+          id: "charlitas_intro",
+          title: "Para conocernos — Sesión corta",
+          subtitle: "15 min",
+          desc: `Encuentro breve para charlar, resolver dudas, conocernos y decidir si iniciar un proceso.`,
+          modal: "online",
+        },
+      ],
+    },
+    {
       id: "disenarme",
       title: "Diseñar(me) — Individual",
       items: [
-        {
-          id: "designme_full",
-          title: "Proceso completo",
-          subtitle: "6 sesiones — 60 min c/u",
-          desc: (
-            <>
-              Un programa estructurado de 6 sesiones que incluye un reporte personalizado con tu carta y acompañamiento entre encuentros. <br/> Tiene 2 meses de vigencia desde el momento del pago.
-            </>
-          ), 
-          modal: "Online",
-        },
         {
           id: "designme_single",
           title: "Sesión suelta",
           subtitle: "1 sesión — 60 min",
           desc: (
             <>
-              Mismos temas que el <span className="font-bold">Proceso completo</span>, pero haciéndolo a tu ritmo. También puede ser un encuentro puntual para explorar, aclarar dudas o recibir orientación práctica.
+              Un encuentro puntual de diseño humano para explorar, aclarar dudas o recibir orientación práctica.
             </>
-          ),          
+          ),
           modal: "Online",
         },
-        
+        {
+          id: "designme_full",
+          title: "Proceso completo",
+          subtitle: "6 sesiones — 60 min c/u",
+          desc: (
+            <>
+              Un programa estructurado de 6 sesiones que incluye un reporte personalizado con tu carta y acompañamiento entre encuentros. <br /> Tiene 2 meses de vigencia desde el momento del pago.
+            </>
+          ),
+          modal: "Online",
+        },
       ],
       details: {
         sessions: [
           "1. Tipo energético, estrategia y autoridad",
-          "2. Los 9 centros energéticos (definidos y sin definir)",
+          "2. Los 9 centros energéticos",
           "3. Continuación de los 9 centros energéticos",
           "4. Líneas y perfil",
           "5. Circuitos y canales",
@@ -59,9 +71,8 @@ export default function Service() {
         outcomes: [
           "Comprender tu tipo de energía y cómo utilizarlo a tu favor",
           "Detectar cuándo tu energía fluye o se bloquea y cómo responder",
-          "Mejorar la comunicación con el mundo y con los demás",
-          "Aprender a escuchar las señales de tu cuerpo",
           "Tomar decisiones con más claridad y menos ruido mental",
+          "Aprender a escuchar las señales de tu cuerpo",
           "Aceptar y aprovechar tu singularidad",
           "Contar con una base práctica para crear una vida más alineada",
         ],
@@ -93,12 +104,11 @@ export default function Service() {
       details: {
         pareja: {
           sessionsSummary: [
-            "4 sesiones en pareja:",
             "1. Tipo energético, estrategia y autoridad",
-            "2. Los 9 centros energéticos (definidos y sin definir)",
+            "2. Los 9 centros energéticos",
             "3. Líneas y Perfil",
             "4. Integración de todo",
-            "+ 2 sesiones individuales para cada persona",
+            "+ 1 sesión individual para cada persona",
           ],
           outcomes: [
             "Comprender la energía de cada uno y cómo acompañarse",
@@ -127,237 +137,206 @@ export default function Service() {
       title: "Charlitas — Otras opciones",
       items: [
         {
-          id: "charlitas_intro",
-          title: "Para conocernos — Sesión corta",
-          subtitle: "15 min",
-          desc: `Encuentro breve para resolver dudas, conocernos y decidir si iniciar un proceso.`,
-          modal: "online",
-        },
-        {
           id: "charlitas_acompan",
           title: "Acompañamiento desde mi mirada",
           subtitle: "60 min",
-          desc: `Sesión centrada en escucha y presencia: lecturas, energías y temas puntuales (tirada de oráculos, ciclicidad, sexualidad, negocios).`,
+          desc: (
+            <>
+              No hablamos de diseño humano. Hablamos de la vida. <br />
+              Es una sesión centrada en la escucha y presencia: lecturas, energías y temas puntuales (tirada de oráculos, ciclicidad, sexualidad, negocios).
+            </>
+          ),
           modal: "online",
         },
       ],
       details: {
-        intro: { price: { ars: "$10.000 ARS", eur: "5€" } },
         acompan: { price: { ars: "$40.000 ARS", eur: "25€" } },
       },
     },
   ];
 
-    return (
-      <section id="servicio" className="relative py-24 px-4 sm:px-6 overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(242,157,142,0.5)] to-transparent" />
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-10 text-center">
-            <h2 className="section-title text-[clamp(30px,4vw,52px)] font-medium mb-4">Servicios</h2>
-          </div>
+  return (
+    <section id="servicio" className="relative py-24 px-4 sm:px-6 overflow-hidden">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(242,157,142,0.5)] to-transparent" />
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 text-center">
+          <h2 className="section-title text-[clamp(30px,4vw,52px)] font-medium mb-4">Servicios</h2>
+        </div>
 
-          <div className="space-y-12">
-            {sections.map((sec) => (
-              <div key={sec.id} id={sec.id === "disenarnos" ? "servicioGrupos" : sec.id === "charlitas" ? "charlitas" : undefined} className="relative">
-                <div className="mb-5 flex items-end justify-between gap-4">
-                  <div>
-                    <h3 className="section-title text-2xl sm:text-3xl font-medium">{sec.id === "disenarme" ? "Diseñar(me) - Individual" : sec.title}</h3>
-                  </div>
+        <div className="space-y-12">
+          {sections.map((sec) => (
+            <div key={sec.id} id={sec.id} className="relative">
+              {sec.id === "disenarme" ? <span id="servicio" className="absolute -top-24" /> : null}
+              {sec.id === "disenarnos" ? <span id="servicioGrupos" className="absolute -top-24" /> : null}
+              <div className="mb-5 flex items-end justify-between gap-4">
+                <div>
+                  <h3 className="section-title text-2xl sm:text-3xl font-medium">{sec.id === "disenarme" ? "Diseñar(me) - Individual" : sec.title}</h3>
                 </div>
+              </div>
 
-                {sec.id === "disenarme" && (
-                  <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <div className="rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4">
-                      <p className="text-sm font-medium text-[#2C2018] mb-3">Temas</p>
-                      <ul className="grid gap-2 text-[13px] text-[#4A3556]">
-                        {sec.details?.sessions?.map((s, i) => {
-                          const m = String(s).match(/^(\d+)\.\s*(.*)$/);
-                          const num = m ? m[1] : null;
-                          const rest = m ? m[2] : s;
-                          return (
-                            <li key={i} className="flex gap-2">
-                              {num ? (
-                                <span className="font-semibold text-[#E8776A] mr-2">{num}.</span>
-                              ) : null}
-                              <span className="leading-6">{rest}</span>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                    <div className="rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4">
-                      <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
-                      <ul className="grid gap-2 text-[13px] text-[#4A3556]">
-                        {sec.details?.outcomes?.slice(0, 6).map((o, i) => (
-                          <li key={i} className="flex gap-2">
-                            <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#E8776A]" />
-                            <span className="leading-6">{o}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
 
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {sec.items.map((it, idx) => {
-                    const product = getProductById(it.id);
-                    const isFreeIntro = product?.id === "charlitas_intro";
-                    const rainbow = ["#E8776A", "#E8A86A", "#D4C46A", "#7AC46A", "#6AAED4", "#9B7AC4"];
-                    const accent = rainbow[idx % rainbow.length];
 
-                    let sessionsList = sec.details?.sessions ?? null;
-                    let outcomesList = sec.details?.outcomes ?? null;
-                    if (sec.id === "disenarnos") {
-                      if (it.id.includes("pareja")) {
-                        sessionsList = sec.details?.pareja?.sessionsSummary ?? null;
-                        outcomesList = sec.details?.pareja?.outcomes ?? null;
-                      } else if (it.id.includes("group")) {
-                        sessionsList = [
-                          "1. Tipo energético, estrategia y autoridad",
-                          "2. Los 9 centros energéticos (definidos y sin definir)",
-                          "3. Líneas y Perfil",
-                          "4. Integración de todo",
-                        ];
-                        outcomesList = sec.details?.group?.outcomes ?? null;
-                      }
+              <div className="grid grid-cols-1 gap-6">
+                {sec.items.map((it, idx) => {
+                  const product = getProductById(it.id);
+                  const isFreeIntro = product?.id === "charlitas_intro";
+                  const rainbow = ["#E8776A", "#E8A86A", "#D4C46A", "#7AC46A", "#6AAED4", "#9B7AC4"];
+                  const accent = rainbow[idx % rainbow.length];
+
+                  let sessionsList = sec.details?.sessions ?? null;
+                  let outcomesList = sec.details?.outcomes ?? null;
+                  if (sec.id === "disenarnos") {
+                    if (it.id.includes("pareja")) {
+                      sessionsList = sec.details?.pareja?.sessionsSummary ?? null;
+                      outcomesList = sec.details?.pareja?.outcomes ?? null;
+                    } else if (it.id.includes("group")) {
+                      sessionsList = [
+                        "1. Tipo energético, estrategia y autoridad",
+                        "2. Los 9 centros energéticos (definidos y sin definir)",
+                        "3. Líneas y Perfil",
+                        "4. Integración de todo",
+                      ];
+                      outcomesList = sec.details?.group?.outcomes ?? null;
                     }
+                  }
 
-                    return (
-                      <div key={idx} className="premium-card group relative overflow-hidden rounded-[1.75rem] p-6 sm:p-7 transition duration-300 hover:-translate-y-1">
-                        <div className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${accent}, rgba(255,255,255,0.95))` }} />
-                        <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-3xl" style={{ background: accent }} />
+                  return (
+                    <div key={idx} className="premium-card group relative overflow-hidden rounded-[1.75rem] p-6 sm:p-7 transition duration-300 hover:-translate-y-1">
+                      <div className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${accent}, rgba(255,255,255,0.95))` }} />
+                      <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-3xl" style={{ background: accent }} />
 
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                          <div className="flex items-start gap-4 flex-1">
-                            <div className="h-14 w-2.5 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.35)] shrink-0" style={{ background: accent }} />
-                            <div className="min-w-0">
-                              <p className="section-kicker mb-1">{it.modal}</p>
-                              <h4 className="text-xl sm:text-2xl font-semibold text-[#2C2018] mb-2 leading-tight">{it.title}</h4>
-                              <p className="text-sm sm:text-[15px] text-[#4A3556] leading-7 max-w-xl">{it.subtitle}</p>
-                            </div>
-                          </div>
-                          <div className="self-start sm:self-auto rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-left sm:text-right shadow-sm backdrop-blur-md shrink-0 min-w-[100px]">
-                            <p className="text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Precio</p>
-                            <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
-                              {!mounted ? (
-                                <span className="inline-block h-[28px] w-16 bg-[#2C2018]/10 animate-pulse rounded" />
-                              ) : isFreeIntro ? (
-                                "Gratis"
-                              ) : product ? (
-                                currency === "ARS" ? (
-                                  formatPrice(product.priceARS, "ARS")
-                                ) : (
-                                  formatPrice(product.priceEUR, "EUR")
-                                )
-                              ) : (
-                                "—"
-                              )}
-                            </p>
-                            <p className="text-xs text-[#4A3556]">
-                              {!mounted ? (
-                                <span className="inline-block h-3 w-8 bg-[#4A3556]/10 animate-pulse rounded" />
-                              ) : isFreeIntro ? (
-                                "Sin costo"
-                              ) : currency === "ARS" ? (
-                                "ARS"
-                              ) : (
-                                "EUR"
-                              )}
-                            </p>
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex items-start gap-4 flex-1">
+                          <div className="h-14 w-2.5 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.35)] shrink-0" style={{ background: accent }} />
+                          <div className="min-w-0">
+                            <p className="section-kicker mb-1">{it.modal}</p>
+                            <h4 className="text-xl sm:text-2xl font-semibold text-[#2C2018] mb-2 leading-tight">{it.title}</h4>
+                            <p className="text-sm sm:text-[15px] text-[#4A3556] leading-7 max-w-xl">{it.subtitle}</p>
                           </div>
                         </div>
+                        <div className="self-start sm:self-auto rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-left sm:text-right shadow-sm backdrop-blur-md shrink-0 min-w-[100px]">
+                          <p className="text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Precio</p>
+                          <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
+                            {!mounted ? (
+                              <span className="inline-block h-[28px] w-16 bg-[#2C2018]/10 animate-pulse rounded" />
+                            ) : isFreeIntro ? (
+                              "Gratis"
+                            ) : product ? (
+                              currency === "ARS" ? (
+                                formatPrice(product.priceARS, "ARS")
+                              ) : (
+                                formatPrice(product.priceEUR, "EUR")
+                              )
+                            ) : (
+                              "—"
+                            )}
+                          </p>
+                          <p className="text-xs text-[#4A3556]">
+                            {!mounted ? (
+                              <span className="inline-block h-3 w-8 bg-[#4A3556]/10 animate-pulse rounded" />
+                            ) : isFreeIntro ? (
+                              "Sin costo"
+                            ) : currency === "ARS" ? (
+                              "ARS"
+                            ) : (
+                              "EUR"
+                            )}
+                          </p>
+                        </div>
+                      </div>
 
-                        <p className="mt-4 text-[14px] sm:text-[15px] leading-7 text-[#4A3556]">{it.desc}</p>
+                      <p className="mt-4 text-[14px] sm:text-[15px] leading-7 text-[#4A3556]">{it.desc}</p>
 
-                        {sec.id !== "disenarme" && (it.subtitle.toLowerCase().includes("6 sesiones") || it.title.toLowerCase().includes("proceso")) ? (
-                          <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-[linear-gradient(135deg,rgba(242,157,142,0.1),rgba(246,189,139,0.1),rgba(252,229,148,0.08),rgba(161,210,197,0.08),rgba(179,213,238,0.1),rgba(206,175,210,0.1))] p-4">
-                            <p className="text-sm font-medium text-[#2C2018] mb-3">Incluye</p>
-                            <ul className="grid gap-2 text-[13px] text-[#4A3556] sm:grid-cols-1">
-                              {sessionsList?.map((s, i) => {
-                                const m = String(s).match(/^(\d+)\.\s*(.*)$/);
-                                const num = m ? m[1] : null;
-                                const rest = m ? m[2] : s;
-                                return (
-                                  <li key={i} className="flex gap-2">
-                                    {num ? (
-                                      <span className="font-semibold mr-2" style={{ color: accent }}>{num}.</span>
-                                    ) : null}
-                                    <span className="leading-6">{rest}</span>
-                                  </li>
-                                );
-                              })}
-                            </ul>
+                      {(it.subtitle.toLowerCase().includes("6 sesiones") || it.title.toLowerCase().includes("proceso")) ? (
+                        <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-[linear-gradient(135deg,rgba(242,157,142,0.1),rgba(246,189,139,0.1),rgba(252,229,148,0.08),rgba(161,210,197,0.08),rgba(179,213,238,0.1),rgba(206,175,210,0.1))] p-4 text-center">
+                          <p className="text-sm font-medium text-[#2C2018] mb-3 text-center">Temas</p>
+                          <ul className={`grid gap-3 text-[13px] text-[#4A3556] ${sec.id === "disenarme" || sec.id === "disenarnos" ? "grid-cols-1 sm:grid-flow-col sm:grid-rows-2 auto-cols-fr" : "grid-cols-1"}`}>
+                            {sessionsList?.map((s, i) => {
+                              const m = String(s).match(/^(\d+)\.\s*(.*)$/);
+                              const num = m ? m[1] : null;
+                              const rest = m ? m[2] : s;
+                              return (
+                                <li key={i} className="flex items-center justify-center gap-1.5 text-center">
+                                  {num ? (
+                                    <span className="font-semibold shrink-0" style={{ color: accent }}>{num}.</span>
+                                  ) : null}
+                                  <span className="leading-snug">{rest}</span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      ) : null}
+
+                      {(it.id === "designme_full" || sec.id !== "disenarme") && outcomesList ? (
+                        <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4 backdrop-blur-md">
+                          <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
+                          <ul className={`grid grid-cols-1 gap-2 text-[13px] text-[#4A3556] ${sec.id === "disenarme" || sec.id === "disenarnos" ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2"}`}>
+                            {outcomesList.slice(0, 6).map((o, i) => {
+                              return (
+                                <li key={i} className="flex gap-2">
+                                  <span className="mt-2 h-1.5 w-1.5 rounded-full shrink-0" style={{ background: accent }} />
+                                  <span className="leading-6">{o}</span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                          {it.id.includes("pareja") ? (
+                            <p className="mt-4 text-xs text-[#4A3556] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
+                          ) : null}
+                        </div>
+                      ) : null}
+
+                      <div className={`mt-6 grid gap-3 ${product && !isFreeIntro ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
+                        {sec.id === "disenarnos" && it.id.includes("group") ? (
+                          <div className="sm:col-span-2 flex flex-col items-center justify-center text-center max-w-md mx-auto w-full">
+                            <p className="text-md text-[#4A3556] font-bold mb-4 text-center">
+                              Ésta es una experiencia personalizada...
+                            </p>
+
+                            <a
+                              href={`https://api.whatsapp.com/send?phone=5491150294100&text=${encodeURIComponent(
+                                "Hola! Quiero consultar el precio y coordinar el proceso para equipos de trabajo o grupo de amigos."
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`${rainbowPseudo} w-full py-4 px-6 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
+                            >
+                              Continuamos por WhatsApp →
+                            </a>
                           </div>
-                        ) : null}
-
-                        {sec.id !== "disenarme" && outcomesList ? (
-                          <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4 backdrop-blur-md">
-                            <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
-                            <ul className="grid grid-cols-1 gap-2 text-[13px] text-[#4A3556] sm:grid-cols-2">
-                              {outcomesList.slice(0, 6).map((o, i) => {
-                                return (
-                                  <li key={i} className="flex gap-2">
-                                    <span className="mt-2 h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
-                                    <span className="leading-6">{o}</span>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                            {it.id.includes("pareja") ? (
-                              <p className="mt-4 text-xs text-[#4A3556] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
-                            ) : null}
-                          </div>
-                        ) : null}
-
-                        <div className="mt-6 grid gap-3 sm:grid-cols-1">
-                          {sec.id === "disenarnos" && it.id.includes("group") ? (
-                            <div className="flex flex-col h-full">
-                              <p className="text-md text-[#4A3556] font-bold mb-4">
-                                Ésta es una experiencia personalizada...
-                              </p>
-
-                              <a
-                                href={`https://api.whatsapp.com/send?phone=5491150294100&text=${encodeURIComponent(
-                                  "Hola! Quiero consultar el precio y coordinar el proceso para equipos de trabajo o grupo de amigos."
-                                )}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`${rainbowPseudo} mt-auto w-full py-4 px- rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
-                              >
-                                Continuamos por WhatsApp →
-                              </a>
-                            </div>
-                          ) : isFreeIntro && product?.calendlyLink ? (
+                        ) : isFreeIntro && product?.calendlyLink ? (
+                          <div className="w-full flex justify-center">
                             <a
                               href={product.calendlyLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={`${rainbowPseudo} w-full py-4 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
+                              className={`${rainbowPseudo} w-full max-w-md py-4 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
                             >
                               Agendar sesión
                             </a>
-                          ) : product ? (
-                            <>
-                              <div className="w-full">
-                                <PayButton productId={product.id} variant="primary" />
-                              </div>
-                              <div className="w-full">
-                                <TransferButton productId={product.id} />
-                              </div>
-                            </>
-                          ) : (
-                            <p className="text-sm text-[#4A3556]">Precio y enlaces próximamente</p>
-                          )}
-                        </div>
+                          </div>
+                        ) : product ? (
+                          <>
+                            <div className="w-full">
+                              <TransferButton productId={product.id} />
+                            </div>
+                            <div className="w-full">
+                              <PayButton productId={product.id} variant="primary" />
+                            </div>
+                          </>
+                        ) : (
+                          <p className="text-sm text-[#4A3556]">Precio y enlaces próximamente</p>
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </section>
-    );
+      </div>
+    </section>
+  );
 }

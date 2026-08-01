@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { getProductById } from "@/lib/products";
 
-export default function PagoEnProcesoLinkPage({
+export default async function PagoEnProcesoLinkPage({
   searchParams,
 }: {
-  searchParams?: { product?: string };
+  searchParams?: Promise<{ product?: string }>;
 }) {
-  const productId = searchParams?.product;
+  const resolvedParams = searchParams ? await searchParams : undefined;
+  const productId = resolvedParams?.product;
   const product = productId ? getProductById(productId) : undefined;
   const continueHref = productId ? `/gracias?product=${encodeURIComponent(productId)}` : "/gracias";
 

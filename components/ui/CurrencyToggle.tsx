@@ -5,11 +5,8 @@ import { useCurrency } from "@/lib/currency-context";
 export default function CurrencyToggle() {
   const { currency, setCurrency, mounted } = useCurrency();
 
-  if (!mounted) {
-    return (
-      <div className="flex items-center gap-2 rounded-full border border-white/70 bg-white/65 p-1 shadow-sm backdrop-blur-xl h-[52px] w-[112px] opacity-60" />
-    );
-  }
+  const isArs = mounted ? currency === "ARS" : false;
+  const isEur = mounted ? currency === "EUR" : true;
 
   return (
     <div
@@ -20,9 +17,9 @@ export default function CurrencyToggle() {
       <button
         type="button"
         onClick={() => setCurrency("ARS")}
-        aria-pressed={currency === "ARS"}
+        aria-pressed={isArs}
         className={`min-h-[44px] inline-flex items-center justify-center text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-200 ${
-          currency === "ARS"
+          isArs
             ? "bg-[#2C2018] text-white shadow-[0_10px_30px_rgba(44,32,24,0.16)]"
             : "text-[#7A6A5A] hover:text-[#2C2018]"
         }`}
@@ -32,9 +29,9 @@ export default function CurrencyToggle() {
       <button
         type="button"
         onClick={() => setCurrency("EUR")}
-        aria-pressed={currency === "EUR"}
+        aria-pressed={isEur}
         className={`min-h-[44px] inline-flex items-center justify-center text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-200 ${
-          currency === "EUR"
+          isEur
             ? "bg-[#2C2018] text-white shadow-[0_10px_30px_rgba(44,32,24,0.16)]"
             : "text-[#7A6A5A] hover:text-[#2C2018]"
         }`}

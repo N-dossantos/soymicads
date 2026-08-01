@@ -32,6 +32,13 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setCurrency(getInitialCurrency());
     setMounted(true);
+
+    const handlePageShow = (e: PageTransitionEvent) => {
+      setCurrency(getInitialCurrency());
+      setMounted(true);
+    };
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
 
   useEffect(() => {

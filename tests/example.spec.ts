@@ -4,7 +4,7 @@ test.describe('Mica Ds site', () => {
   test('renders the homepage and toggles currency', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { name: 'No venís a sanar. Venís a vivir siendo vos.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'No venís solo a sanar. Venís a vivir siendo vos.' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Servicios' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Proceso completo' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Para conocernos — Sesión corta' })).toBeVisible();
@@ -47,6 +47,7 @@ test.describe('Mica Ds site', () => {
     await page.goBack();
     await expect(page).toHaveURL('/');
 
+    await expect(page.getByRole('button', { name: 'ARS' })).toBeVisible();
     await page.getByRole('button', { name: 'ARS' }).click();
     await page.getByRole('button', { name: 'EUR' }).click();
     await page.getByRole('link', { name: 'Diseñar(me)' }).click();
@@ -66,7 +67,7 @@ test.describe('Mica Ds site', () => {
     await page.goto('/pago-en-proceso/link?product=designme_full');
     await expect(page.getByRole('heading', { name: 'El pago está en curso...' })).toBeVisible();
     await page.getByRole('link', { name: 'Ya pagué, continuar →' }).click();
-    await expect(page).toHaveURL(/\/gracias$/);
+    await expect(page).toHaveURL(/\/gracias(\?.*)?$/);
     await expect(page.getByRole('heading', { name: '¡Bienvenido/a al proceso!' })).toBeVisible();
   });
 });

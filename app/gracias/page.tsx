@@ -10,12 +10,13 @@ function getCalendlyLink(productId?: string) {
   return product?.calendlyLink ?? DEFAULT_CALENDLY_LINK;
 }
 
-export default function GraciasPage({
+export default async function GraciasPage({
   searchParams,
 }: {
-  searchParams?: { product?: string };
+  searchParams?: Promise<{ product?: string }>;
 }) {
-  const productId = searchParams?.product;
+  const resolvedParams = searchParams ? await searchParams : undefined;
+  const productId = resolvedParams?.product;
   const calendlyLink = getCalendlyLink(productId);
   const product = productId ? getProductById(productId) : undefined;
 

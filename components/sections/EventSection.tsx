@@ -24,7 +24,7 @@ export default function EventSection({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           
           {/* Card 1: Aprender a Diseñar(nos) - Realizado */}
-          <div className="rainbow-surface relative overflow-hidden rounded-[2.5rem] p-8 sm:p-10 text-center border border-white/60 shadow-xl backdrop-blur-xl opacity-90 transition hover:opacity-100 hover:scale-[1.02] duration-300">
+          <div className="rainbow-surface relative overflow-hidden rounded-[2.5rem] p-8 sm:p-10 text-center border border-white/60 shadow-xl backdrop-blur-xl opacity-90 transition hover:opacity-100 hover:scale-[1.02] duration-300 order-2 lg:order-1">
             {/* Top subtle bar gradient */}
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#f29d8e] via-[#f6bd8b] via-[#fce594] via-[#a1d2c5] via-[#b3d5ee] to-[#ceafd2] opacity-60" />
 
@@ -61,7 +61,7 @@ export default function EventSection({
           </div>
 
           {/* Card 2: Aprender a Diseñar(nos) II - Próximamente */}
-          <div className="rainbow-surface relative overflow-hidden rounded-[2.5rem] p-8 sm:p-10 text-center border border-white/60 shadow-2xl backdrop-blur-xl transform lg:scale-105 z-10 transition hover:scale-[1.07] duration-300">
+          <div className="rainbow-surface relative overflow-hidden rounded-[2.5rem] p-8 sm:p-10 text-center border border-white/60 shadow-2xl backdrop-blur-xl transform lg:scale-105 z-10 transition hover:scale-[1.07] duration-300 order-1 lg:order-2">
             {/* Top subtle bar gradient */}
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#f29d8e] via-[#f6bd8b] via-[#fce594] via-[#a1d2c5] via-[#b3d5ee] to-[#ceafd2]" />
 
