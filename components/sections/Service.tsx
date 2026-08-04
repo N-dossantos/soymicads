@@ -213,20 +213,20 @@ export default function Service() {
                       <div className="premium-card relative overflow-hidden rounded-[1.625rem] !border-0 p-6 sm:p-7">
                         <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-3xl" style={{ background: accent }} />
 
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                          <div className="flex items-start gap-4 flex-1">
-                            <div className="h-14 w-2.5 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.35)] shrink-0" style={{ background: accent }} />
-                            <div className="min-w-0">
+                        <div className="flex items-start justify-between gap-3 sm:gap-4">
+                          <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                            <div className="h-14 w-2.5 rounded-full bg-[linear-gradient(180deg,#f29d8e,#f6bd8b,#fce594,#a1d2c5,#b3d5ee,#ceafd2)] opacity-[0.5] shadow-[0_0_0_8px_rgba(255,255,255,0.35)] shrink-0" />
+                            <div className="min-w-0 flex-1">
                               <p className="section-kicker mb-1">{it.modal}</p>
                               <h4 className="text-xl sm:text-2xl font-semibold text-[#2C2018] mb-2 leading-tight">{it.title}</h4>
                               <p className="text-sm sm:text-[15px] text-[#4A3556] leading-7 max-w-xl">{it.subtitle}</p>
                             </div>
                           </div>
-                          <div className="self-start sm:self-auto rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-left sm:text-right shadow-sm backdrop-blur-md shrink-0 min-w-[100px]">
-                            <p className="text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Precio</p>
-                            <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
+                          <div className="rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-3 py-2.5 sm:px-4 sm:py-3 text-right shadow-sm backdrop-blur-md shrink-0 min-w-[90px] sm:min-w-[100px]">
+                            <p className="text-[10px] sm:text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Precio</p>
+                            <p className="mt-0.5 sm:mt-1 text-[17px] sm:text-[20px] font-serif text-[#2C2018]">
                               {!mounted ? (
-                                <span className="inline-block h-[28px] w-16 bg-[#2C2018]/10 animate-pulse rounded" />
+                                <span className="inline-block h-[24px] sm:h-[28px] w-14 sm:w-16 bg-[#2C2018]/10 animate-pulse rounded" />
                               ) : isFreeIntro ? (
                                 "Gratis"
                               ) : product ? (
@@ -239,7 +239,7 @@ export default function Service() {
                                 "—"
                               )}
                             </p>
-                            <p className="text-xs text-[#4A3556]">
+                            <p className="text-[10px] sm:text-xs text-[#4A3556]">
                               {!mounted ? (
                                 <span className="inline-block h-3 w-8 bg-[#4A3556]/10 animate-pulse rounded" />
                               ) : isFreeIntro ? (
