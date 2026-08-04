@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { label: "Diseñar(me)", href: "#disenarme" },
   { label: "Diseñar(nos)", href: "#disenarnos" },
   { label: "Charlitas", href: "#charlitas" },
+  { label: "Podcast", href: "#podcast" },
 ];
 
 

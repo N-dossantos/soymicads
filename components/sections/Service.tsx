@@ -2,6 +2,7 @@
 
 import PayButton from "@/components/ui/PayButton";
 import TransferButton from "@/components/ui/TransferButton";
+import { GlowCard } from "@/components/ui/spotlight-card";
 import { useCurrency } from "@/lib/currency-context";
 import { formatPrice, getProductById } from "@/lib/products";
 
@@ -181,7 +182,9 @@ export default function Service() {
                   const product = getProductById(it.id);
                   const isFreeIntro = product?.id === "charlitas_intro";
                   const rainbow = ["#E8776A", "#E8A86A", "#D4C46A", "#7AC46A", "#6AAED4", "#9B7AC4"];
+                  const glowColors = ["red", "orange", "orange", "green", "blue", "purple"] as const;
                   const accent = rainbow[idx % rainbow.length];
+                  const glowColor = glowColors[idx % glowColors.length];
 
                   let sessionsList = sec.details?.sessions ?? null;
                   let outcomesList = sec.details?.outcomes ?? null;
@@ -201,135 +204,141 @@ export default function Service() {
                   }
 
                   return (
-                    <div key={idx} className="premium-card group relative overflow-hidden rounded-[1.75rem] p-6 sm:p-7 transition duration-300 hover:-translate-y-1">
-                      <div className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${accent}, rgba(255,255,255,0.95))` }} />
-                      <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-3xl" style={{ background: accent }} />
+                    <GlowCard
+                      key={idx}
+                      glowColor={glowColor}
+                      customSize
+                      className="group relative transition duration-300 hover:-translate-y-1 !block !p-0 !gap-0 !grid-rows-none !rounded-[1.75rem] !shadow-none !bg-transparent !bg-none"
+                    >
+                      <div className="premium-card relative overflow-hidden rounded-[1.625rem] !border-0 p-6 sm:p-7">
+                        <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-3xl" style={{ background: accent }} />
 
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                        <div className="flex items-start gap-4 flex-1">
-                          <div className="h-14 w-2.5 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.35)] shrink-0" style={{ background: accent }} />
-                          <div className="min-w-0">
-                            <p className="section-kicker mb-1">{it.modal}</p>
-                            <h4 className="text-xl sm:text-2xl font-semibold text-[#2C2018] mb-2 leading-tight">{it.title}</h4>
-                            <p className="text-sm sm:text-[15px] text-[#4A3556] leading-7 max-w-xl">{it.subtitle}</p>
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="flex items-start gap-4 flex-1">
+                            <div className="h-14 w-2.5 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.35)] shrink-0" style={{ background: accent }} />
+                            <div className="min-w-0">
+                              <p className="section-kicker mb-1">{it.modal}</p>
+                              <h4 className="text-xl sm:text-2xl font-semibold text-[#2C2018] mb-2 leading-tight">{it.title}</h4>
+                              <p className="text-sm sm:text-[15px] text-[#4A3556] leading-7 max-w-xl">{it.subtitle}</p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="self-start sm:self-auto rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-left sm:text-right shadow-sm backdrop-blur-md shrink-0 min-w-[100px]">
-                          <p className="text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Precio</p>
-                          <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
-                            {!mounted ? (
-                              <span className="inline-block h-[28px] w-16 bg-[#2C2018]/10 animate-pulse rounded" />
-                            ) : isFreeIntro ? (
-                              "Gratis"
-                            ) : product ? (
-                              currency === "ARS" ? (
-                                formatPrice(product.priceARS, "ARS")
+                          <div className="self-start sm:self-auto rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/72 px-4 py-3 text-left sm:text-right shadow-sm backdrop-blur-md shrink-0 min-w-[100px]">
+                            <p className="text-xs uppercase tracking-[0.18em] text-[#7a5a72]">Precio</p>
+                            <p className="mt-1 text-[20px] font-serif text-[#2C2018]">
+                              {!mounted ? (
+                                <span className="inline-block h-[28px] w-16 bg-[#2C2018]/10 animate-pulse rounded" />
+                              ) : isFreeIntro ? (
+                                "Gratis"
+                              ) : product ? (
+                                currency === "ARS" ? (
+                                  formatPrice(product.priceARS, "ARS")
+                                ) : (
+                                  formatPrice(product.priceEUR, "EUR")
+                                )
                               ) : (
-                                formatPrice(product.priceEUR, "EUR")
-                              )
-                            ) : (
-                              "—"
-                            )}
-                          </p>
-                          <p className="text-xs text-[#4A3556]">
-                            {!mounted ? (
-                              <span className="inline-block h-3 w-8 bg-[#4A3556]/10 animate-pulse rounded" />
-                            ) : isFreeIntro ? (
-                              "Sin costo"
-                            ) : currency === "ARS" ? (
-                              "ARS"
-                            ) : (
-                              "EUR"
-                            )}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="mt-4 text-[14px] sm:text-[15px] leading-7 text-[#4A3556]">{it.desc}</p>
-
-                      {(it.subtitle.toLowerCase().includes("6 sesiones") || it.title.toLowerCase().includes("proceso")) ? (
-                        <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-[linear-gradient(135deg,rgba(242,157,142,0.1),rgba(246,189,139,0.1),rgba(252,229,148,0.08),rgba(161,210,197,0.08),rgba(179,213,238,0.1),rgba(206,175,210,0.1))] p-4 text-center">
-                          <p className="text-sm font-medium text-[#2C2018] mb-3 text-center">Temas</p>
-                          <ul className={`grid gap-3 text-[13px] text-[#4A3556] ${sec.id === "disenarme" || sec.id === "disenarnos" ? "grid-cols-1 sm:grid-flow-col sm:grid-rows-2 auto-cols-fr" : "grid-cols-1"}`}>
-                            {sessionsList?.map((s, i) => {
-                              const m = String(s).match(/^(\d+)\.\s*(.*)$/);
-                              const num = m ? m[1] : null;
-                              const rest = m ? m[2] : s;
-                              return (
-                                <li key={i} className="flex items-center justify-center gap-1.5 text-center">
-                                  {num ? (
-                                    <span className="font-semibold shrink-0" style={{ color: accent }}>{num}.</span>
-                                  ) : null}
-                                  <span className="leading-snug">{rest}</span>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                      ) : null}
-
-                      {(it.id === "designme_full" || sec.id !== "disenarme") && outcomesList ? (
-                        <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4 backdrop-blur-md">
-                          <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
-                          <ul className={`grid grid-cols-1 gap-2 text-[13px] text-[#4A3556] ${sec.id === "disenarme" || sec.id === "disenarnos" ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2"}`}>
-                            {outcomesList.slice(0, 6).map((o, i) => {
-                              return (
-                                <li key={i} className="flex gap-2">
-                                  <span className="mt-2 h-1.5 w-1.5 rounded-full shrink-0" style={{ background: accent }} />
-                                  <span className="leading-6">{o}</span>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                          {it.id.includes("pareja") ? (
-                            <p className="mt-4 text-xs text-[#4A3556] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
-                          ) : null}
-                        </div>
-                      ) : null}
-
-                      <div className={`mt-6 grid gap-3 ${product && !isFreeIntro ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
-                        {sec.id === "disenarnos" && it.id.includes("group") ? (
-                          <div className="sm:col-span-2 flex flex-col items-center justify-center text-center max-w-md mx-auto w-full">
-                            <p className="text-md text-[#4A3556] font-bold mb-4 text-center">
-                              Ésta es una experiencia personalizada...
+                                "—"
+                              )}
                             </p>
+                            <p className="text-xs text-[#4A3556]">
+                              {!mounted ? (
+                                <span className="inline-block h-3 w-8 bg-[#4A3556]/10 animate-pulse rounded" />
+                              ) : isFreeIntro ? (
+                                "Sin costo"
+                              ) : currency === "ARS" ? (
+                                "ARS"
+                              ) : (
+                                "EUR"
+                              )}
+                            </p>
+                          </div>
+                        </div>
 
-                            <a
-                              href={`https://api.whatsapp.com/send?phone=5491150294100&text=${encodeURIComponent(
-                                "Hola! Quiero consultar el precio y coordinar el proceso para equipos de trabajo o grupo de amigos."
-                              )}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={`${rainbowPseudo} w-full py-4 px-6 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
-                            >
-                              Continuamos por WhatsApp →
-                            </a>
+                        <p className="mt-4 text-[14px] sm:text-[15px] leading-7 text-[#4A3556]">{it.desc}</p>
+
+                        {(it.subtitle.toLowerCase().includes("6 sesiones") || it.title.toLowerCase().includes("proceso")) ? (
+                          <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-[linear-gradient(135deg,rgba(242,157,142,0.1),rgba(246,189,139,0.1),rgba(252,229,148,0.08),rgba(161,210,197,0.08),rgba(179,213,238,0.1),rgba(206,175,210,0.1))] p-4 text-center">
+                            <p className="text-sm font-medium text-[#2C2018] mb-3 text-center">Temas</p>
+                            <ul className={`grid gap-3 text-[13px] text-[#4A3556] ${sec.id === "disenarme" || sec.id === "disenarnos" ? "grid-cols-1 sm:grid-flow-col sm:grid-rows-2 auto-cols-fr" : "grid-cols-1"}`}>
+                              {sessionsList?.map((s, i) => {
+                                const m = String(s).match(/^(\d+)\.\s*(.*)$/);
+                                const num = m ? m[1] : null;
+                                const rest = m ? m[2] : s;
+                                return (
+                                  <li key={i} className="flex items-center justify-center gap-1.5 text-center">
+                                    {num ? (
+                                      <span className="font-semibold shrink-0" style={{ color: accent }}>{num}.</span>
+                                    ) : null}
+                                    <span className="leading-snug">{rest}</span>
+                                  </li>
+                                );
+                              })}
+                            </ul>
                           </div>
-                        ) : isFreeIntro && product?.calendlyLink ? (
-                          <div className="w-full flex justify-center">
-                            <a
-                              href={product.calendlyLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={`${rainbowPseudo} w-full max-w-md py-4 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
-                            >
-                              Agendar sesión
-                            </a>
+                        ) : null}
+
+                        {(it.id === "designme_full" || sec.id !== "disenarme") && outcomesList ? (
+                          <div className="mt-5 rounded-2xl border border-[rgba(255,255,255,0.55)] bg-white/75 p-4 backdrop-blur-md">
+                            <p className="text-sm font-medium text-[#2C2018] mb-3">¿Qué te llevás?</p>
+                            <ul className={`grid grid-cols-1 gap-2 text-[13px] text-[#4A3556] ${sec.id === "disenarme" || sec.id === "disenarnos" ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2"}`}>
+                              {outcomesList.slice(0, 6).map((o, i) => {
+                                return (
+                                  <li key={i} className="flex gap-2">
+                                    <span className="mt-2 h-1.5 w-1.5 rounded-full shrink-0" style={{ background: accent }} />
+                                    <span className="leading-6">{o}</span>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                            {it.id.includes("pareja") ? (
+                              <p className="mt-4 text-xs text-[#4A3556] font-bold">Si prefieren abonarlo por separado, cada sesión tiene un valor de $70.000 / 40€</p>
+                            ) : null}
                           </div>
-                        ) : product ? (
-                          <>
-                            <div className="w-full">
-                              <TransferButton productId={product.id} />
+                        ) : null}
+
+                        <div className={`mt-6 grid gap-3 ${product && !isFreeIntro ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
+                          {sec.id === "disenarnos" && it.id.includes("group") ? (
+                            <div className="sm:col-span-2 flex flex-col items-center justify-center text-center max-w-md mx-auto w-full">
+                              <p className="text-md text-[#4A3556] font-bold mb-4 text-center">
+                                Ésta es una experiencia personalizada...
+                              </p>
+
+                              <a
+                                href={`https://api.whatsapp.com/send?phone=5491150294100&text=${encodeURIComponent(
+                                  "Hola! Quiero consultar el precio y coordinar el proceso para equipos de trabajo o grupo de amigos."
+                                )}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`${rainbowPseudo} w-full py-4 px-6 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
+                              >
+                                Continuamos por WhatsApp →
+                              </a>
                             </div>
-                            <div className="w-full">
-                              <PayButton productId={product.id} variant="primary" />
+                          ) : isFreeIntro && product?.calendlyLink ? (
+                            <div className="w-full flex justify-center">
+                              <a
+                                href={product.calendlyLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`${rainbowPseudo} w-full max-w-md py-4 rounded-full text-center font-medium border border-[#C9B9A9] text-[#53392B] backdrop-blur-sm before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
+                              >
+                                Agendar sesión
+                              </a>
                             </div>
-                          </>
-                        ) : (
-                          <p className="text-sm text-[#4A3556]">Precio y enlaces próximamente</p>
-                        )}
+                          ) : product ? (
+                            <>
+                              <div className="w-full">
+                                <TransferButton productId={product.id} />
+                              </div>
+                              <div className="w-full">
+                                <PayButton productId={product.id} variant="primary" />
+                              </div>
+                            </>
+                          ) : (
+                            <p className="text-sm text-[#4A3556]">Precio y enlaces próximamente</p>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    </GlowCard>
                   );
                 })}
               </div>

@@ -6,6 +6,7 @@ import Hero from "@/components/sections/Hero";
 import Philosophy from "@/components/sections/Philosophy";
 import EventSection from "@/components/sections/EventSection";
 import Service from "@/components/sections/Service";
+import PodcastSection from "@/components/sections/PodcastSection";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
 
@@ -19,6 +20,7 @@ export default function Home() {
       <EventSection />
       <Philosophy />
       <Service />
+      <PodcastSection />
       <FAQ />
       <Footer />
     </main>
