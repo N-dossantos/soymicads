@@ -29,8 +29,6 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 rainbow-bar" />
-
       <nav
         className={`fixed top-0 left-0 right-0 z-40 px-4 sm:px-6 transition-all duration-300 ${scrolled ? "" : ""}`}
       >

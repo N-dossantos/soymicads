@@ -29,10 +29,24 @@ html {
   scroll-behavior: smooth;
   max-width: 100%;
   overflow-x: hidden;
+  background-color: var(--bg-cream);
 }
 
 body {
   font-family: var(--font-dm-sans);
+  color: #2C2018;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
   background-color: var(--bg-cream);
   background-image:
     radial-gradient(circle at 10% 8%, rgba(242, 157, 142, 0.22), transparent 20%),
@@ -43,12 +57,6 @@ body {
     radial-gradient(circle at 18% 86%, rgba(161, 210, 197, 0.18), transparent 20%),
     radial-gradient(circle at 86% 82%, rgba(179, 213, 238, 0.2), transparent 22%),
     linear-gradient(180deg, #fffdfb 0%, #fdf4ef 40%, #f8eff5 100%);
-  background-attachment: fixed;
-  color: #2C2018;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  max-width: 100%;
-  overflow-x: hidden;
 }
 
 body::before {
