@@ -105,7 +105,7 @@ export default function EventSection({
                 rel="noopener noreferrer"
                 className={`${rainbowPseudo} py-3.5 px-7 rounded-full text-[15px] font-medium text-[#53392B] border border-[#C9B9A9] shadow-md hover:shadow-lg hover:scale-105 active:scale-100 before:bg-[#FFF9F4] before:opacity-90 hover:before:opacity-40`}
               >
-                Anotarme en lista de espera →
+                Anotarme →
               </a>
             </div>
           </div>
