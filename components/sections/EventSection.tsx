@@ -5,7 +5,7 @@ interface EventSectionProps {
 }
 
 export default function EventSection({
-  formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeTqXxxToZobg4P1BE1atDH9LWyevtd7YAncRicecbPfwO14A/viewform?usp=publish-editor",
+  formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfjAilIBieNLPt_-DIxN7J-FrEXir2gBpyXjdsobG3Nyy79Fg/viewform?usp=publish-editor",
 }: EventSectionProps) {
   const rainbowPseudo = [
     "relative isolate overflow-hidden inline-flex items-center justify-center transition-all duration-300",
@@ -68,7 +68,7 @@ export default function EventSection({
             {/* Badge */}
             <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#7a5a72] bg-white/70 border border-white/80 shadow-sm mb-6">
               <span className="h-2 w-2 rounded-full bg-[#E8776A] animate-pulse" />
-              Próximamente
+              Fecha confirmada
             </div>
 
             {/* Title */}
@@ -79,18 +79,21 @@ export default function EventSection({
             {/* Date & Time Badge */}
             <div className="mx-auto max-w-fit rounded-2xl bg-white/80 border border-[rgba(107,79,58,0.12)] px-5 py-3 shadow-sm mb-6 text-sm sm:text-base font-medium text-[#4A3556]">
               <div>
-                <span className="text-[#E8776A] font-semibold">📅 Fecha a confirmar</span>
+                <span className="text-[#E8776A] font-semibold">📅 Sábado 29 de agosto</span>
               </div>
               <div className="mt-1.5 text-xs sm:text-sm text-[#7a5a72] font-semibold flex items-center justify-center gap-1.5">
-                <span>💻 Evento online a través de Zoom</span>
+                <span>⏰ 16:00–18:00 hs Argentina</span>
+              </div>
+              <div className="mt-1 text-xs sm:text-sm text-[#7a5a72] font-semibold flex items-center justify-center gap-1.5">
+                <span>🌍 21:00–23:00 hs España</span>
               </div>
             </div>
 
             {/* Description */}
             <p className="mx-auto max-w-lg text-[15px] sm:text-[16px] leading-relaxed text-[#4A3556] mb-8">
-              ¡Se viene la segunda edición de <strong>Aprender a Diseñar(nos)</strong>! <br className="hidden sm:inline" />
+              ¡Ya está confirmada la próxima edición de <strong>Aprender a Diseñar(nos)</strong>! <br className="hidden sm:inline" />
               <span className="font-medium text-[#2C2018]">
-                Anotate en la lista de espera para ser de los primeros en enterarte cuando abramos las inscripciones.
+                Te esperamos para una experiencia online en vivo y cercana, pensada para diseñar la relación con vos mismo y con tu entorno.
               </span>
             </p>
 
