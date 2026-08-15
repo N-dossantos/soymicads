@@ -54,3 +54,4 @@ node_modules/
 
 CLAUDE.md
 GEMINI.md
+.env*
