@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { Preference } from "mercadopago";
 import { getProductById } from "@/lib/products";
-import { getMercadoPagoClient, getSiteOrigin } from "@/lib/mercadopago";
+import { getMercadoPagoClient, getSiteOrigin, supportsAutoReturn } from "@/lib/mercadopago";
 
 export async function POST(request: Request) {
   let productId: unknown;
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
           pending: returnUrl,
           failure: returnUrl,
         },
-        auto_return: "approved",
+        ...(supportsAutoReturn(origin) ? { auto_return: "approved" as const } : {}),
         notification_url: `${origin}/api/mercadopago/webhook`,
       },
     });

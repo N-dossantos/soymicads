@@ -16,3 +16,17 @@ export function getSiteOrigin(request: Request): string {
   const configured = process.env.SITE_URL?.trim().replace(/\/+$/, "");
   return configured || new URL(request.url).origin;
 }
+
+// Mercado Pago rechaza la preferencia ("auto_return invalid. back_url.success
+// must be defined") si back_urls.success no es una URL pública en https —
+// pasa siempre en desarrollo local, donde el origin cae en http://localhost.
+// En ese caso omitimos auto_return: el checkout funciona igual, solo que
+// quien compra tiene que tocar "Volver al sitio" en vez de volver solo.
+export function supportsAutoReturn(origin: string): boolean {
+  try {
+    const { protocol, hostname } = new URL(origin);
+    return protocol === "https:" && hostname !== "localhost" && hostname !== "127.0.0.1";
+  } catch {
+    return false;
+  }
+}
