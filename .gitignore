@@ -45,6 +45,10 @@ node_modules/
 # Context Mode
 .context/
 
+# Agent skills (npx skills add)
+/.agents/
+/skills-lock.json
+
 /.gemini
 /.claude
 

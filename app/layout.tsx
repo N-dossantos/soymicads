@@ -17,7 +17,12 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
 });
 
+// Mismo origen que usa lib/mercadopago.ts's getSiteOrigin: preferimos SITE_URL
+// (fijo, configurado a mano) y caemos al dominio de Vercel por defecto.
+const siteUrl = process.env.SITE_URL?.trim().replace(/\/+$/, "") || "https://soymicads.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Mica Ds — Diseño Humano ✨",
   description:
     "Acá no venís a sanar. Venís a vivir. Un espacio de acompañamiento basado en Diseño Humano y coaching vivencial para tomar decisiones que tengan sentido para vos.",
@@ -32,6 +37,13 @@ export const metadata: Metadata = {
     description: "Acá no venís a sanar. Venís a vivir.",
     type: "website",
     locale: "es_AR",
+    images: [{ url: "/images/logo.jpeg", width: 800, height: 800, alt: "Mica Ds — Diseño Humano" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "Mica Ds — Diseño Humano",
+    description: "Acá no venís a sanar. Venís a vivir.",
+    images: ["/images/logo.jpeg"],
   },
 };
 

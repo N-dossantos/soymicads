@@ -7,8 +7,10 @@ import Philosophy from "@/components/sections/Philosophy";
 import EventSection from "@/components/sections/EventSection";
 import Service from "@/components/sections/Service";
 import PodcastSection from "@/components/sections/PodcastSection";
+import GiftCardSection from "@/components/sections/GiftCardSection";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
+import EventPopup from "@/components/ui/EventPopup";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,9 +22,11 @@ export default function Home() {
       <EventSection />
       <Philosophy />
       <Service />
+      <GiftCardSection />
       <PodcastSection />
       <FAQ />
       <Footer />
+      <EventPopup />
     </main>
   );
 }

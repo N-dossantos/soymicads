@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { whatsappHref } from "@/lib/contact";
 
-const WHATSAPP_PHONE = "5491150294100";
 const WHATSAPP_MESSAGE =
   "Hola! Quiero saber más sobre tus propuestas. Podés ayudarme?";
 
@@ -11,9 +11,7 @@ export default function WhatsAppButton() {
 
   if (pathname?.startsWith("/pago-en-proceso")) return null;
 
-  const href = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(
-    WHATSAPP_MESSAGE
-  )}`;
+  const href = whatsappHref(WHATSAPP_MESSAGE);
 
   return (
     <a

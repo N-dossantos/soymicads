@@ -6,14 +6,17 @@ import { useDialogA11y } from "@/lib/useDialogA11y";
 interface EventPopupProps {
   formsUrl?: string;
   targetSectionId?: string;
-  // Default deadline: July 15 at 10:00 hs Argentina (UTC-3)
+  // Popup start date: August 21, 2026 (UTC-3)
+  startDate?: string;
+  // Event deadline: August 29, 2026 at 16:00 hs Argentina (UTC-3)
   deadlineDate?: string;
 }
 
 export default function EventPopup({
-  formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfZnABlaQzVpqgqJZ9hRfBAxYzCOL8V7JdqCqqLEUgrr0anlA/viewform?usp=header",
+  formsUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfjAilIBieNLPt_-DIxN7J-FrEXir2gBpyXjdsobG3Nyy79Fg/viewform?usp=publish-editor",
   targetSectionId = "encuentro",
-  deadlineDate = "2026-07-26T10:00:00-03:00",
+  startDate = "2026-08-25T00:00:00-03:00",
+  deadlineDate = "2026-08-29T16:00:00-03:00",
 }: EventPopupProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isActiveClass, setIsActiveClass] = useState(false);
@@ -27,11 +30,17 @@ export default function EventPopup({
       return;
     }
 
-    // 2. Check if current time is past the event deadline date
+    // 2. Check date range: from August 21 until the time of the event (Aug 29, 16:00 hs)
     const now = new Date();
+    const start = new Date(startDate);
     const deadline = new Date(deadlineDate);
 
-    // If deadline date is valid and already passed, do not show popup
+    // If current time is before start date, do not show popup
+    if (!isNaN(start.getTime()) && now < start) {
+      return;
+    }
+
+    // If current time is past deadline date, do not show popup
     if (!isNaN(deadline.getTime()) && now > deadline) {
       return;
     }
@@ -46,7 +55,7 @@ export default function EventPopup({
     }, 800);
 
     return () => clearTimeout(timer);
-  }, [deadlineDate]);
+  }, [startDate, deadlineDate]);
 
   const handleClose = () => {
     sessionStorage.setItem("eventPopupClosed", "true");
@@ -105,16 +114,16 @@ export default function EventPopup({
 
         {/* Title */}
         <h3 id={titleId} className="section-title text-2xl sm:text-3xl font-semibold text-[#2C2018] mb-2 leading-tight">
-          Aprender a Diseñar(nos)
+          Aprender a Diseñar(nos) II
         </h3>
 
         {/* Date / Time summary */}
         <div className="mb-4">
-          <p className="text-xs sm:text-sm font-medium text-[#E8776A] flex items-center gap-1.5">
-            <span>📅 Sáb 25 Jul — 10:00 hs (ARG) / 15:00 hs (ESP)</span>
+          <p className="text-xs sm:text-sm font-medium text-[#E8776A] flex items-center gap-1.5 font-semibold">
+            <span>📅 Sáb 29 Ago — 16:00 hs (ARG) / 21:00 hs (ESP)</span>
           </p>
           <p className="text-xs font-semibold text-[#7a5a72] mt-1 flex items-center gap-1">
-            <span>💻 Evento online a través de Zoom</span>
+            <span>🎁 Evento 100% Gratuito | 💻 Online en vivo por Zoom</span>
           </p>
         </div>
 

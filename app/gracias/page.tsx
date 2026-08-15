@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getProductById } from "@/lib/products";
+import { whatsappHref } from "@/lib/contact";
 
 const DEFAULT_CALENDLY_LINK = "https://cal.com/soymicads/disenar-me";
 
@@ -13,12 +14,62 @@ function getCalendlyLink(productId?: string) {
 export default async function GraciasPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ product?: string }>;
+  searchParams?: Promise<{ product?: string; gift?: string }>;
 }) {
   const resolvedParams = searchParams ? await searchParams : undefined;
   const productId = resolvedParams?.product;
+  const isGift = resolvedParams?.gift === "1";
   const calendlyLink = getCalendlyLink(productId);
   const product = productId ? getProductById(productId) : undefined;
+
+  // Quien compra un regalo no es quien agenda la sesión: la entrega y la
+  // agenda de quien recibe se coordinan aparte (por WhatsApp), así que acá no
+  // mostramos el formulario de carta ni el link de Calendly del comprador.
+  if (isGift) {
+    return (
+      <main className="relative isolate min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden">
+        <div className="fixed top-0 left-0 right-0 z-50 h-1 rainbow-bar" />
+
+        <div className="absolute inset-x-0 top-0 -z-10 mx-auto h-[600px] max-w-lg">
+          <div className="absolute left-8 top-16 h-48 w-48 rounded-full bg-[rgba(242,157,142,0.18)] blur-3xl animate-pulse" />
+          <div className="absolute right-10 top-28 h-56 w-56 rounded-full bg-[rgba(179,213,238,0.18)] blur-3xl" />
+        </div>
+
+        <div className="premium-card relative w-full max-w-md overflow-hidden rounded-[2rem] p-6 sm:p-8 text-center shadow-[0_28px_80px_rgba(44,32,24,0.16)] bg-white/75 backdrop-blur-xl">
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#E8776A] via-[#fce594] to-[#6AAED4]" />
+
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#2C2018] mb-4 mt-2 leading-tight">
+            ¡Gracias por tu regalo!
+          </h1>
+
+          <p className="text-[#4A3556] text-sm sm:text-base mb-6 leading-relaxed">
+            Ya recibimos el pago{product ? ` de ${product.title}` : ""}. Nos vamos a poner en
+            contacto para coordinar la entrega según lo que elegiste.
+          </p>
+
+          <div className="flex flex-col gap-4">
+            <a
+              href={whatsappHref("Hola Mica! Tengo una consulta sobre el regalo que acabo de comprar.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative isolate w-full text-white px-6 py-3.5 rounded-full text-[15px] font-medium bg-[#25D366] hover:brightness-105 shadow-md transition duration-200"
+            >
+              Escribinos por WhatsApp →
+            </a>
+          </div>
+
+          <div className="mt-8 border-t border-[#D8C8B9]/30 pt-6">
+            <Link
+              href="/"
+              className="text-sm font-medium text-[#8C6A56] hover:text-[#2C2018] transition-colors"
+            >
+              Volver al inicio
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="relative isolate min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden">

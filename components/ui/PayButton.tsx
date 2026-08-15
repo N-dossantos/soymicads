@@ -27,6 +27,7 @@ export default function PayButton({
 }: PayButtonProps) {
   const { currency } = useCurrency();
   const [error, setError] = useState<string | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [bizumCopied, setBizumCopied] = useState(false);
   const [bizumOpen, setBizumOpen] = useState(false);
   const bizumTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -132,18 +133,32 @@ export default function PayButton({
     );
   }
 
-  // ARS: abrir link manual de Mercado Pago configurado por producto.
-  function handleMercadoPagoLink() {
+  // ARS: crea una preferencia de pago real y redirige al Checkout Pro de Mercado Pago.
+  async function handleMercadoPagoLink() {
     if (!product) return;
     setError(null);
+    setCheckoutLoading(true);
 
-    if (!product.mercadoLink) {
-      setError("No hay link de pago configurado para este servicio.");
-      return;
+    try {
+      const response = await fetch("/api/create-preference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product.id }),
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok || !data?.initPoint) {
+        setError(data?.error ?? "No se pudo iniciar el pago. Intentá de nuevo.");
+        setCheckoutLoading(false);
+        return;
+      }
+
+      window.location.href = data.initPoint;
+    } catch {
+      setError("No se pudo iniciar el pago. Intentá de nuevo.");
+      setCheckoutLoading(false);
     }
-
-    window.open(product.mercadoLink, "_blank", "noopener,noreferrer");
-    window.location.href = `/pago-en-proceso/link?product=${encodeURIComponent(product.id)}`;
   }
 
   return (
@@ -151,16 +166,17 @@ export default function PayButton({
       <button
         type="button"
         onClick={handleMercadoPagoLink}
-        className={`${rainbowPseudo} min-h-[44px] flex items-center justify-center w-full py-3 rounded-full text-sm font-medium border border-[rgba(107,79,58,0.14)] text-[#2C2018] backdrop-blur-sm before:bg-white/55 before:opacity-90 hover:before:opacity-40 ${className}`}
+        disabled={checkoutLoading}
+        className={`${rainbowPseudo} min-h-[44px] flex items-center justify-center w-full py-3 rounded-full text-sm font-medium border border-[rgba(107,79,58,0.14)] text-[#2C2018] backdrop-blur-sm before:bg-white/55 before:opacity-90 hover:before:opacity-40 disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
       >
-        {`Abrir link de pago ${price}`}
+        {checkoutLoading ? "Redirigiendo a Mercado Pago…" : `Pagar con Mercado Pago ${price}`}
       </button>
 
       {error && (
         <p role="alert" className="text-xs text-red-500 text-center">{error}</p>
       )}
       <p className="text-xs text-[#7A6A5A] text-center">
-        Pago seguro · Link de pago de Mercado Pago
+        Pago seguro · Checkout de Mercado Pago
       </p>
     </div>
   );

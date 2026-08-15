@@ -13,7 +13,7 @@ export default function Philosophy() {
           <div className="relative mx-auto max-w-3xl">
             <h2 className="sr-only">Valores</h2>
             <p className="section-kicker mb-4 text-white/90" aria-hidden="true">valores</p>
-            <blockquote className="font-serif text-[clamp(30px,4.5vw,54px)] leading-[1.16] font-light italic tracking-tight mb-5 text-[#2C2018]">
+            <blockquote className="text-balance font-serif text-[clamp(30px,4.5vw,54px)] leading-[1.16] font-light italic tracking-tight mb-5 text-[#2C2018]">
               Un espacio basado en Diseño Humano y experimentación real
             </blockquote>
             <p className="mx-auto max-w-2xl text-[15px] sm:text-[16px] leading-8 text-[#433446]">

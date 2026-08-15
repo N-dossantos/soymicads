@@ -10,9 +10,25 @@ import { useDialogA11y } from "@/lib/useDialogA11y";
 interface TransferButtonProps {
   productId: string;
   className?: string;
+  // Corre antes de abrir el modal (p. ej. para validar un formulario externo,
+  // como los datos del regalo). Si devuelve false, el modal no se abre.
+  // No se llama al cerrar, así siempre se puede cerrar el modal.
+  onBeforeOpen?: () => boolean;
+  // Corre cuando se hace click en "Enviar comprobante / Continuar", después
+  // de ver los datos bancarios (p. ej. para avisar por WhatsApp).
+  onContinue?: () => void;
+  // Deshabilita el botón (p. ej. mientras otro medio de pago del mismo form
+  // tiene una petición en curso, para evitar acciones en conflicto).
+  disabled?: boolean;
 }
 
-export default function TransferButton({ productId, className = "" }: TransferButtonProps) {
+export default function TransferButton({
+  productId,
+  className = "",
+  onBeforeOpen,
+  onContinue,
+  disabled = false,
+}: TransferButtonProps) {
   const { currency } = useCurrency();
   const [copiedField, setCopiedField] = useState<"cbu" | "alias" | "iban" | "beneficiario" | "full" | null>(null);
   const [open, setOpen] = useState(false);
@@ -29,12 +45,16 @@ export default function TransferButton({ productId, className = "" }: TransferBu
     copyTimeoutRef.current = null;
   }, [open]);
 
+  // El producto puede no estar elegido todavía (p. ej. en la gift card, antes
+  // de seleccionar la propuesta): igual mostramos el botón, sin precio, y que
+  // onBeforeOpen se encargue de bloquear la apertura con el error del form.
   const product = getProductById(productId);
-  if (!product) return null;
 
   // Use explicit transfer price when available, otherwise fallback to generic price
-  const displayPriceNumber = currency === "ARS" ? (product.priceTransferARS ?? product.priceARS) : (product.priceTransferEUR ?? product.priceEUR);
-  const displayPrice = currency === "ARS" ? formatPrice(displayPriceNumber, "ARS") : formatPrice(displayPriceNumber, "EUR");
+  const displayPriceNumber = product
+    ? (currency === "ARS" ? (product.priceTransferARS ?? product.priceARS) : (product.priceTransferEUR ?? product.priceEUR))
+    : null;
+  const displayPrice = displayPriceNumber != null ? formatPrice(displayPriceNumber, currency) : null;
 
   const bankDetailsARS = {
     holderName: "Dos Santos Micaela",
@@ -92,10 +112,18 @@ export default function TransferButton({ productId, className = "" }: TransferBu
     <div className={`space-y-2 ${className}`}>
       <button
         type="button"
-        onClick={() => setOpen((current) => !current)}
-        className="min-h-[44px] flex items-center justify-center w-full py-2.5 rounded-full text-sm font-medium border border-[#C9B9A9]/60 text-[#53392B] bg-white/40 hover:bg-[#F5EEE9]/60 transition-all duration-200"
+        disabled={disabled}
+        onClick={() => {
+          if (open) {
+            setOpen(false);
+            return;
+          }
+          if (onBeforeOpen && !onBeforeOpen()) return;
+          setOpen(true);
+        }}
+        className="min-h-[44px] flex items-center justify-center w-full py-2.5 rounded-full text-sm font-medium border border-[#C9B9A9]/60 text-[#53392B] bg-white/40 hover:bg-[#F5EEE9]/60 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Transferencia — {displayPrice}
+        Transferencia{displayPrice ? ` — ${displayPrice}` : ""}
       </button>
 
       {open ? (
@@ -204,7 +232,10 @@ export default function TransferButton({ productId, className = "" }: TransferBu
                   <p className="text-sm text-[#7A6A5A] text-center mb-2">Si ya realizaste el pago</p>
                   <a
                     href={`/pago-en-proceso/transferencia?product=${encodeURIComponent(productId)}`}
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      setOpen(false);
+                      onContinue?.();
+                    }}
                     className="min-h-[44px] flex items-center justify-center w-full text-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
                   >
                     Enviar comprobante / Continuar →

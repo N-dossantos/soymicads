@@ -21,7 +21,8 @@ export default function PagoEnProcesoPage() {
         </h1>
 
         <p className="text-[#4A3556] text-sm sm:text-base mb-6 leading-relaxed">
-          Si venís desde Mercado Pago o Bizum, usá el flujo de pago por link. Si hiciste una transferencia, usá el flujo de transferencia.
+          Si venís desde Mercado Pago, usá el flujo de pago por link. Si hiciste Bizum o una
+          transferencia bancaria, usá el flujo de transferencia.
         </p>
 
         <div className="flex flex-col gap-4">

@@ -87,6 +87,9 @@ export default function EventSection({
               <div className="mt-1 text-xs sm:text-sm text-[#7a5a72] font-semibold flex items-center justify-center gap-1.5">
                 <span>🌍 21:00–23:00 hs España</span>
               </div>
+              <div className="mt-1.5 pt-1.5 border-t border-[rgba(107,79,58,0.1)] text-xs sm:text-sm text-[#E8776A] font-semibold flex items-center justify-center gap-1.5">
+                <span>🎁 Actividad 100% Gratuita</span>
+              </div>
             </div>
 
             {/* Description */}
