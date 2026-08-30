@@ -10,7 +10,7 @@ import PodcastSection from "@/components/sections/PodcastSection";
 import GiftCardSection from "@/components/sections/GiftCardSection";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
-import EventPopup from "@/components/ui/EventPopup";
+// import EventPopup from "@/components/ui/EventPopup";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,8 +26,10 @@ export default function Home() {
       <PodcastSection />
       <FAQ />
       <Footer />
-      <EventPopup />
+      {/* EventPopup en stand-by por si se realiza un tercer encuentro */}
+      {/* <EventPopup /> */}
     </main>
   );
 }
+
 
