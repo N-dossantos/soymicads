@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Payment } from "mercadopago";
 import { getProductById } from "@/lib/products";
 import { getMercadoPagoClient } from "@/lib/mercadopago";
+import { getStripeClient } from "@/lib/stripe";
 import { whatsappHref } from "@/lib/contact";
 
 type VerificationState =
@@ -39,6 +40,29 @@ async function verifyPayment(paymentId: string, expectedReference: string): Prom
   }
 }
 
+async function verifyCardPayment(sessionId: string, expectedProductId: string): Promise<VerificationState> {
+  try {
+    const session = await getStripeClient().checkout.sessions.retrieve(sessionId);
+
+    // El session_id es un id largo y aleatorio que Stripe solo le pasa a quien
+    // completó el checkout; además exigimos que sea del producto de la URL.
+    if (session.metadata?.product_id !== expectedProductId) {
+      return { kind: "rejected" };
+    }
+
+    if (session.payment_status === "paid") {
+      return { kind: "approved" };
+    }
+    if (session.status === "expired") {
+      return { kind: "rejected" };
+    }
+    return { kind: "pending" };
+  } catch (err) {
+    console.error("[stripe] session verification failed", err);
+    return { kind: "error" };
+  }
+}
+
 export default async function PagoEnProcesoLinkPage({
   searchParams,
 }: {
@@ -48,6 +72,7 @@ export default async function PagoEnProcesoLinkPage({
     collection_id?: string;
     ref?: string;
     gift?: string;
+    session_id?: string;
   }>;
 }) {
   const resolvedParams = searchParams ? await searchParams : undefined;
@@ -56,13 +81,19 @@ export default async function PagoEnProcesoLinkPage({
   const paymentId = resolvedParams?.payment_id ?? resolvedParams?.collection_id;
   const ref = resolvedParams?.ref;
   const isGift = resolvedParams?.gift === "1";
+  // Stripe (tarjeta, EUR) vuelve con session_id; Mercado Pago con payment_id + ref.
+  const sessionId = resolvedParams?.session_id;
 
   // Requerimos producto + ref (el external_reference que nosotros generamos
   // al crear la preferencia): sin eso no tenemos con qué validar que este
   // pago es el de esta persona, y no queremos exponer el estado de un
   // payment_id ajeno adivinado.
   const state: VerificationState =
-    paymentId && product && ref ? await verifyPayment(paymentId, ref) : { kind: "no-payment" };
+    sessionId && product
+      ? await verifyCardPayment(sessionId, product.id)
+      : paymentId && product && ref
+        ? await verifyPayment(paymentId, ref)
+        : { kind: "no-payment" };
 
   const continueHref = productId
     ? `/gracias?product=${encodeURIComponent(productId)}${isGift ? "&gift=1" : ""}`
@@ -77,7 +108,7 @@ export default async function PagoEnProcesoLinkPage({
     },
     pending: {
       heading: "Estamos confirmando tu pago",
-      body: "Tu pago está siendo procesado por Mercado Pago. Esto puede tardar unos minutos — te va a llegar un email de confirmación apenas se acredite.",
+      body: `Tu pago está siendo procesado${sessionId ? "" : " por Mercado Pago"}. Esto puede tardar unos minutos — te va a llegar un email de confirmación apenas se acredite.`,
     },
     rejected: {
       heading: "El pago no se completó",

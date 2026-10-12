@@ -26,7 +26,6 @@ export default async function PagoEnProcesoTransferenciaPage({
   let amount = "";
   if (product) {
     if (product.priceTransferARS) amount = formatPrice(product.priceTransferARS, "ARS");
-    else if (product.priceTransferEUR) amount = formatPrice(product.priceTransferEUR, "EUR");
     else if (product.priceARS) amount = formatPrice(product.priceARS, "ARS");
     else if (product.priceEUR) amount = formatPrice(product.priceEUR, "EUR");
   }

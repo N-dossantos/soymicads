@@ -1,5 +1,6 @@
 "use client";
 
+import CardPayButton from "@/components/ui/CardPayButton";
 import PayButton from "@/components/ui/PayButton";
 import TransferButton from "@/components/ui/TransferButton";
 import { GlowCard } from "@/components/ui/spotlight-card";
@@ -327,8 +328,13 @@ export default function Service() {
                               </div>
                             ) : product ? (
                               <>
+                                {/* EUR: tarjeta (Stripe) + Bizum. ARS: transferencia + Mercado Pago. */}
                                 <div className="w-full">
-                                  <TransferButton productId={product.id} />
+                                  {currency === "EUR" ? (
+                                    <CardPayButton productId={product.id} />
+                                  ) : (
+                                    <TransferButton productId={product.id} />
+                                  )}
                                 </div>
                                 <div className="w-full">
                                   <PayButton productId={product.id} variant="primary" />

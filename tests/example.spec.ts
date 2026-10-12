@@ -9,15 +9,42 @@ test.describe('Mica Ds site', () => {
     await expect(page.getByRole('heading', { name: 'Proceso completo' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Para conocernos — Sesión corta' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Pagar con Bizum €125' })).toBeVisible();
+    // En EUR la tarjeta lleva un 2% de recargo y no se ofrece transferencia.
+    await expect(page.getByRole('button', { name: 'Pagar con tarjeta €127,50' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^Transferencia/ })).toHaveCount(0);
 
     await page.getByRole('button', { name: 'ARS' }).click();
 
     await expect(page.getByRole('button', { name: 'Pagar con Mercado Pago $230.000' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Transferencia — $210.000' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^Pagar con tarjeta/ })).toHaveCount(0);
 
     await page.getByRole('button', { name: 'EUR' }).click();
 
     await expect(page.getByRole('button', { name: 'Pagar con Bizum €125' })).toBeVisible();
+  });
+
+  test('starts a Stripe card checkout when the card button is clicked', async ({ page }) => {
+    await page.route('**/api/stripe/checkout', async (route) => {
+      const request = route.request();
+      expect(request.method()).toBe('POST');
+      expect(JSON.parse(request.postData() ?? '{}')).toEqual({ productId: 'designme_full' });
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ url: 'https://checkout.stripe.com/c/pay/cs_test_fake' }),
+      });
+    });
+    await page.route('https://checkout.stripe.com/**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<h1>Stripe Checkout</h1>' })
+    );
+
+    await page.goto('/');
+    await page.getByRole('button', { name: 'EUR' }).click();
+    await page.getByRole('button', { name: 'Pagar con tarjeta €127,50' }).click();
+
+    await expect(page).toHaveURL(/checkout\.stripe\.com\/c\/pay\/cs_test_fake/);
   });
 
   test('opens the transfer flow and returns to the homepage without blocking clicks', async ({ page }) => {

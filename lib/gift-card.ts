@@ -98,6 +98,29 @@ export const EMPTY_GIFT_CARD_DETAILS: GiftCardDetails = {
   message: "",
 };
 
+function sanitize(value: unknown, limit: number): string {
+  return typeof value === "string" ? value.trim().slice(0, limit) : "";
+}
+
+// Arma los datos del regalo a partir del body crudo de una request: el
+// servidor nunca confía en lo que llega, así que recorta y normaliza todo.
+export function parseGiftCardDetails(body: Record<string, unknown> | null): GiftCardDetails {
+  return {
+    ...EMPTY_GIFT_CARD_DETAILS,
+    productId: sanitize(body?.productId, 64),
+    buyerName: sanitize(body?.buyerName, GIFT_FIELD_LIMITS.buyerName),
+    buyerEmail: sanitize(body?.buyerEmail, GIFT_FIELD_LIMITS.buyerEmail),
+    buyerPhone: sanitize(body?.buyerPhone, GIFT_FIELD_LIMITS.buyerPhone),
+    recipientName: sanitize(body?.recipientName, GIFT_FIELD_LIMITS.recipientName),
+    deliveryMethod:
+      body?.deliveryMethod === "self" || body?.deliveryMethod === "gift" ? body.deliveryMethod : "",
+    recipientEmail: sanitize(body?.recipientEmail, GIFT_FIELD_LIMITS.recipientEmail),
+    recipientPhone: sanitize(body?.recipientPhone, GIFT_FIELD_LIMITS.recipientPhone),
+    deliveryDate: sanitize(body?.deliveryDate, GIFT_FIELD_LIMITS.deliveryDate),
+    message: sanitize(body?.message, GIFT_FIELD_LIMITS.message),
+  };
+}
+
 // Validación mínima y deliberadamente permisiva: alcanza para evitar errores de
 // tipeo sin rechazar formatos internacionales de teléfono o nombres con acentos.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;

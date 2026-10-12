@@ -4,17 +4,11 @@ import { Preference } from "mercadopago";
 import { getProductById } from "@/lib/products";
 import { getMercadoPagoClient, getSiteOrigin, supportsAutoReturn } from "@/lib/mercadopago";
 import {
-  EMPTY_GIFT_CARD_DETAILS,
-  GIFT_FIELD_LIMITS,
   getGiftPrice,
   isGiftableProductId,
+  parseGiftCardDetails,
   validateGiftCardDetails,
-  type GiftCardDetails,
 } from "@/lib/gift-card";
-
-function sanitize(value: unknown, limit: number): string {
-  return typeof value === "string" ? value.trim().slice(0, limit) : "";
-}
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -24,20 +18,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Body inválido." }, { status: 400 });
   }
 
-  const details: GiftCardDetails = {
-    ...EMPTY_GIFT_CARD_DETAILS,
-    productId: sanitize(body?.productId, 64),
-    buyerName: sanitize(body?.buyerName, GIFT_FIELD_LIMITS.buyerName),
-    buyerEmail: sanitize(body?.buyerEmail, GIFT_FIELD_LIMITS.buyerEmail),
-    buyerPhone: sanitize(body?.buyerPhone, GIFT_FIELD_LIMITS.buyerPhone),
-    recipientName: sanitize(body?.recipientName, GIFT_FIELD_LIMITS.recipientName),
-    deliveryMethod:
-      body?.deliveryMethod === "self" || body?.deliveryMethod === "gift" ? body.deliveryMethod : "",
-    recipientEmail: sanitize(body?.recipientEmail, GIFT_FIELD_LIMITS.recipientEmail),
-    recipientPhone: sanitize(body?.recipientPhone, GIFT_FIELD_LIMITS.recipientPhone),
-    deliveryDate: sanitize(body?.deliveryDate, GIFT_FIELD_LIMITS.deliveryDate),
-    message: sanitize(body?.message, GIFT_FIELD_LIMITS.message),
-  };
+  const details = parseGiftCardDetails(body);
 
   const errors = validateGiftCardDetails(details);
   if (Object.keys(errors).length > 0) {

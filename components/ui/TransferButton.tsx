@@ -2,7 +2,6 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { getProductById, formatPrice } from "@/lib/products";
-import { useCurrency } from "@/lib/currency-context";
 import { Portal } from "@/lib/portal";
 import { useDialogA11y } from "@/lib/useDialogA11y";
 
@@ -22,6 +21,9 @@ interface TransferButtonProps {
   disabled?: boolean;
 }
 
+// Transferencia bancaria en ARS (CBU/alias). En EUR no se ofrece: ahí los
+// medios de pago son tarjeta (Stripe) y Bizum, así que quien lo usa tiene que
+// renderizarlo solo con la moneda en ARS.
 export default function TransferButton({
   productId,
   className = "",
@@ -29,8 +31,7 @@ export default function TransferButton({
   onContinue,
   disabled = false,
 }: TransferButtonProps) {
-  const { currency } = useCurrency();
-  const [copiedField, setCopiedField] = useState<"cbu" | "alias" | "iban" | "beneficiario" | "full" | null>(null);
+  const [copiedField, setCopiedField] = useState<"cbu" | "alias" | "full" | null>(null);
   const [open, setOpen] = useState(false);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -51,10 +52,8 @@ export default function TransferButton({
   const product = getProductById(productId);
 
   // Use explicit transfer price when available, otherwise fallback to generic price
-  const displayPriceNumber = product
-    ? (currency === "ARS" ? (product.priceTransferARS ?? product.priceARS) : (product.priceTransferEUR ?? product.priceEUR))
-    : null;
-  const displayPrice = displayPriceNumber != null ? formatPrice(displayPriceNumber, currency) : null;
+  const displayPriceNumber = product ? (product.priceTransferARS ?? product.priceARS) : null;
+  const displayPrice = displayPriceNumber != null ? formatPrice(displayPriceNumber, "ARS") : null;
 
   const bankDetailsARS = {
     holderName: "Dos Santos Micaela",
@@ -63,24 +62,11 @@ export default function TransferButton({
     alias: "soymicaeladossantos",
   };
 
-  const bankDetailsEUR = {
-    holderName: "Dos Santos Micaela",
-    bankName: "Banco BBVA",
-    iban: "ES07 0182 4003 1802 0164 3124",
-    bic: "BBVAESMM",
-    beneficiario: "Micaela Maria Dos Santos",
-  };
-
-  const headerHolderName = currency === "ARS" ? bankDetailsARS.holderName : bankDetailsEUR.holderName;
-  const headerBankName = currency === "ARS" ? bankDetailsARS.bankName : bankDetailsEUR.bankName;
-
   function copyToClipboard(label: string, value: string) {
     navigator.clipboard
       .writeText(value)
       .then(() => {
-        if (label === "CBU") setCopiedField("cbu");
-        else if (label === "IBAN") setCopiedField("iban");
-        else setCopiedField("beneficiario");
+        setCopiedField(label === "CBU" ? "cbu" : "alias");
         copyTimeoutRef.current = setTimeout(() => setCopiedField(null), 1800);
       })
       .catch(() => {
@@ -89,13 +75,7 @@ export default function TransferButton({
   }
 
   function copyBankDetails() {
-    let details = "";
-    if (currency === "ARS") {
-      details = `Transferencia bancaria\nA nombre de: ${bankDetailsARS.holderName}\nBanco: ${bankDetailsARS.bankName}\nCBU: ${bankDetailsARS.cbu}\nAlias: ${bankDetailsARS.alias}\nImporte: ${displayPrice}`;
-    } else {
-      // EUR
-      details = `Transferencia bancaria\nA nombre de: ${bankDetailsEUR.holderName}\nBanco: ${bankDetailsEUR.bankName}\nIBAN: ${bankDetailsEUR.iban}\nBIC: ${bankDetailsEUR.bic}\nBeneficiario: ${bankDetailsEUR.beneficiario}\nImporte: ${displayPrice}`;
-    }
+    const details = `Transferencia bancaria\nA nombre de: ${bankDetailsARS.holderName}\nBanco: ${bankDetailsARS.bankName}\nCBU: ${bankDetailsARS.cbu}\nAlias: ${bankDetailsARS.alias}\nImporte: ${displayPrice}`;
     navigator.clipboard
       .writeText(details)
       .then(() => {
@@ -141,8 +121,8 @@ export default function TransferButton({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p id={titleId} className="text-xs uppercase tracking-[0.18em] text-[#8C6A56] mb-1">Datos bancarios</p>
-                  <p className="text-sm font-medium text-[#2C2018] truncate">{headerHolderName}</p>
-                  <p className="text-xs text-[#7A6A5A]">{headerBankName}</p>
+                  <p className="text-sm font-medium text-[#2C2018] truncate">{bankDetailsARS.holderName}</p>
+                  <p className="text-xs text-[#7A6A5A]">{bankDetailsARS.bankName}</p>
                 </div>
 
                 <button
@@ -155,64 +135,29 @@ export default function TransferButton({
               </div>
 
               <div className="space-y-3 rounded-2xl border border-[#E7DBD1] bg-white p-4">
-                {currency === "ARS" ? (
-                  <>
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">CBU</p>
-                      <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsARS.cbu}</p>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard("CBU", bankDetailsARS.cbu)}
-                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
-                      >
-                        {copiedField === "cbu" ? "¡Copiado!" : "Copiar CBU"}
-                      </button>
-                    </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">CBU</p>
+                  <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsARS.cbu}</p>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard("CBU", bankDetailsARS.cbu)}
+                    className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                  >
+                    {copiedField === "cbu" ? "¡Copiado!" : "Copiar CBU"}
+                  </button>
+                </div>
 
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">Alias</p>
-                      <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsARS.alias}</p>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard("alias", bankDetailsARS.alias)}
-                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
-                      >
-                        {copiedField === "alias" ? "¡Copiado!" : "Copiar alias"}
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">IBAN</p>
-                      <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsEUR.iban}</p>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard("IBAN", bankDetailsEUR.iban)}
-                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
-                      >
-                        {copiedField === "iban" ? "¡Copiado!" : "Copiar IBAN"}
-                      </button>
-                    </div>
-
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">BIC</p>
-                      <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsEUR.bic}</p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">Beneficiario</p>
-                      <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsEUR.beneficiario}</p>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard("beneficiario", bankDetailsEUR.beneficiario)}
-                        className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
-                      >
-                        {copiedField === "beneficiario" ? "¡Copiado!" : "Copiar beneficiario"}
-                      </button>
-                    </div>
-                  </>
-                )}
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-[#8C6A56]">Alias</p>
+                  <p className="mt-1 text-sm font-medium text-[#2C2018] break-all select-all">{bankDetailsARS.alias}</p>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard("alias", bankDetailsARS.alias)}
+                    className="mt-2 min-h-[44px] inline-flex items-center justify-center rounded-full border border-[#C9B9A9] px-4 py-2 text-sm font-medium text-[#53392B] hover:bg-[#F5EEE9] transition"
+                  >
+                    {copiedField === "alias" ? "¡Copiado!" : "Copiar alias"}
+                  </button>
+                </div>
               </div>
 
               <div className="rounded-2xl bg-[#F8F1EB] p-4 space-y-2">

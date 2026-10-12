@@ -17,7 +17,7 @@ export interface Product {
   priceMercadoARS?: number; // Mercado Pago (ARS)
   priceTransferARS?: number; // Transferencia bancaria (ARS)
   priceBizumEUR?: number; // Bizum / pago en EUR
-  priceTransferEUR?: number; // Transferencia en EUR
+  priceCardEUR?: number; // Tarjeta vía Stripe (EUR) — Bizum + 2% de recargo
   mercadoLink?: string; // Link de pago de Mercado Pago proporcionado manualmente
   calendlyLink?: string; // Link de agenda para esta sesión
   paymentMethod: PaymentMethod;
@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 41_000,
     priceTransferARS: 37_000,
     priceBizumEUR: 25,
-    priceTransferEUR: 25,
+    priceCardEUR: 25.5,
     mercadoLink: "https://mpago.la/2xZRfT4",
     calendlyLink: "https://cal.com/soymicads/disenar-me",
     paymentMethod: "mercadopago",
@@ -50,7 +50,7 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 230_000,
     priceTransferARS: 210_000,
     priceBizumEUR: 125,
-    priceTransferEUR: 125,
+    priceCardEUR: 127.5,
     mercadoLink: "https://mpago.la/1QHUbwd",
     calendlyLink: "https://cal.com/soymicads/disenar-me",
     paymentMethod: "mercadopago",
@@ -67,7 +67,7 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 390_000,
     priceTransferARS: 360_000,
     priceBizumEUR: 210,
-    priceTransferEUR: 210,
+    priceCardEUR: 214.2,
     mercadoLink: "https://mpago.la/1a9RMSA",
     calendlyLink: "https://cal.com/soymicads/disenar-nos",
     paymentMethod: "mercadopago",
@@ -84,7 +84,7 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 80_000,
     priceTransferARS: 80_000,
     priceBizumEUR: 50,
-    priceTransferEUR: 50,
+    priceCardEUR: 51,
     calendlyLink: "https://cal.com/soymicads/disenar-nos",
     paymentMethod: "mercadopago",
     category: "diseniarme",
@@ -100,7 +100,7 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 0,
     priceTransferARS: 0,
     priceBizumEUR: 0,
-    priceTransferEUR: 0,
+    priceCardEUR: 0,
     calendlyLink: "https://cal.com/soymicads/encuentro-para-conocernos",
     paymentMethod: "mercadopago",
     category: "diseniarme",
@@ -114,7 +114,7 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 44_000,
     priceTransferARS: 40_000,
     priceBizumEUR: 25,
-    priceTransferEUR: 25,
+    priceCardEUR: 25.5,
     mercadoLink: "https://mpago.la/25j453h",
     calendlyLink: "https://cal.com/soymicads/charlita",
     paymentMethod: "mercadopago",
@@ -126,7 +126,13 @@ export function formatPrice(amount: number, currency: Currency): string {
   if (currency === "ARS") {
     return `$${amount.toLocaleString("es-AR")}`;
   }
-  return `€${amount}`;
+  // Los precios con tarjeta llevan recargo y pueden tener céntimos (€25,50).
+  if (Number.isInteger(amount)) return `€${amount}`;
+  return `€${amount.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+export function getCardPriceEUR(product: Product): number {
+  return product.priceCardEUR ?? product.priceEUR;
 }
 
 export function getProductById(id: string): Product | undefined {

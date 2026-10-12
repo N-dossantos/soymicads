@@ -5,6 +5,7 @@ import { useCurrency } from "@/lib/currency-context";
 import { Portal } from "@/lib/portal";
 import { useDialogA11y } from "@/lib/useDialogA11y";
 import { WHATSAPP_PHONE, whatsappHref } from "@/lib/contact";
+import { formatPrice, getCardPriceEUR } from "@/lib/products";
 import TransferButton from "@/components/ui/TransferButton";
 import {
   EMPTY_GIFT_CARD_DETAILS,
@@ -64,7 +65,9 @@ export default function GiftCardSection() {
   const [details, setDetails] = useState<GiftCardDetails>(EMPTY_GIFT_CARD_DETAILS);
   const [errors, setErrors] = useState<GiftCardErrors>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  // Qué checkout se está iniciando, para deshabilitar los demás botones y
+  // mostrar el "Redirigiendo…" solo en el que se tocó.
+  const [loading, setLoading] = useState<"mercadopago" | "card" | null>(null);
   const [bizumOpen, setBizumOpen] = useState(false);
   const [bizumCopied, setBizumCopied] = useState(false);
 
@@ -87,6 +90,9 @@ export default function GiftCardSection() {
   };
 
   const selectedPriceLabel = selectedProduct ? priceLabel(selectedProduct.id) : null;
+  // En EUR la tarjeta lleva recargo, así que tiene su propio precio.
+  const selectedCardPriceLabel =
+    mounted && selectedProduct ? formatPrice(getCardPriceEUR(selectedProduct), "EUR") : null;
 
   function update<K extends keyof GiftCardDetails>(key: K, value: GiftCardDetails[K]) {
     setDetails((prev) => ({ ...prev, [key]: value }));
@@ -112,46 +118,51 @@ export default function GiftCardSection() {
     return false;
   }
 
-  function giftMessage(): string {
+  function giftMessage(price: string | null = selectedPriceLabel): string {
     if (!selectedProduct) return "";
-    return buildGiftWhatsAppMessage(details, selectedProduct, selectedPriceLabel ?? "");
+    return buildGiftWhatsAppMessage(details, selectedProduct, price ?? "");
   }
 
-  // ARS → Checkout Pro de Mercado Pago, con los datos del regalo viajando como
-  // metadata de la preferencia. Además abrimos WhatsApp para que a Mica le
-  // llegue el aviso aunque el pago se acredite más tarde.
-  async function handleMercadoPago() {
+  // ARS → Checkout Pro de Mercado Pago; EUR con tarjeta → Checkout de Stripe.
+  // En ambos los datos del regalo viajan como metadata del pago, y además
+  // abrimos WhatsApp para que a Mica le llegue el aviso aunque el pago se
+  // acredite más tarde.
+  async function handleCheckout(provider: "mercadopago" | "card") {
     if (!validateOrShowErrors()) return;
+    const endpoint = provider === "mercadopago" ? "/api/gift-card" : "/api/stripe/gift-card";
+    const message = giftMessage(provider === "card" ? selectedCardPriceLabel : selectedPriceLabel);
 
     // El window.open tiene que salir del gesto del usuario, así que abrimos la
     // pestaña ya mismo y recién le damos destino cuando la preferencia existe.
     const giftTab = window.open("", "_blank");
     setSubmitError(null);
-    setLoading(true);
+    setLoading(provider);
 
     try {
-      const response = await fetch("/api/gift-card", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(details),
       });
       const data = await response.json().catch(() => null);
 
-      if (!response.ok || !data?.initPoint) {
+      // Mercado Pago devuelve initPoint; Stripe, url.
+      const checkoutUrl: string | undefined = data?.initPoint ?? data?.url;
+      if (!response.ok || !checkoutUrl) {
         giftTab?.close();
         setSubmitError(data?.error ?? "No se pudo iniciar el pago. Intentá de nuevo.");
-        setLoading(false);
+        setLoading(null);
         return;
       }
 
       if (giftTab) {
-        giftTab.location.href = whatsappHref(giftMessage());
+        giftTab.location.href = whatsappHref(message);
       }
-      window.location.href = data.initPoint;
+      window.location.href = checkoutUrl;
     } catch {
       giftTab?.close();
       setSubmitError("No se pudo iniciar el pago. Intentá de nuevo.");
-      setLoading(false);
+      setLoading(null);
     }
   }
 
@@ -213,7 +224,7 @@ export default function GiftCardSection() {
           onSubmit={(e) => {
             e.preventDefault();
             if (currency === "ARS") {
-              void handleMercadoPago();
+              void handleCheckout("mercadopago");
             } else {
               handleBizum();
             }
@@ -592,14 +603,30 @@ export default function GiftCardSection() {
               </div>
             </div>
 
-            {/* Tres botones de pago, con Mercado Pago/Bizum al centro. */}
+            {/* Tres botones de pago, con Mercado Pago/Bizum al centro. A la
+                izquierda: transferencia en ARS, tarjeta (Stripe) en EUR. */}
             <div className="mx-auto mt-8 grid max-w-xl gap-3 sm:grid-cols-3 sm:items-start">
-              <TransferButton
-                productId={details.productId}
-                onBeforeOpen={handleTransferOpen}
-                onContinue={handleTransferContinue}
-                disabled={loading}
-              />
+              {!mounted ? (
+                <span className="block h-[44px] w-full animate-pulse rounded-full bg-[rgba(107,79,58,0.1)]" />
+              ) : currency === "ARS" ? (
+                <TransferButton
+                  productId={details.productId}
+                  onBeforeOpen={handleTransferOpen}
+                  onContinue={handleTransferContinue}
+                  disabled={loading !== null}
+                />
+              ) : (
+                <button
+                  type="button"
+                  disabled={loading !== null}
+                  onClick={() => void handleCheckout("card")}
+                  className="min-h-[44px] flex items-center justify-center w-full py-2.5 rounded-full text-sm font-medium border border-[#C9B9A9]/60 text-[#53392B] bg-white/40 hover:bg-[#F5EEE9]/60 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading === "card"
+                    ? "Redirigiendo al pago…"
+                    : `Regalar con tarjeta${selectedCardPriceLabel ? ` ${selectedCardPriceLabel}` : ""}`}
+                </button>
+              )}
 
               <div className="space-y-3">
                 {!mounted ? (
@@ -607,10 +634,10 @@ export default function GiftCardSection() {
                 ) : (
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading !== null}
                     className={`${rainbowPseudo} min-h-[44px] w-full rounded-full py-2.5 text-sm font-medium text-[#2C2018] border border-[rgba(107,79,58,0.14)] shadow-md backdrop-blur-sm before:bg-white/55 before:opacity-90 hover:before:opacity-40 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60`}
                   >
-                    {loading
+                    {loading === "mercadopago"
                       ? "Redirigiendo a Mercado Pago…"
                       : currency === "ARS"
                         ? `Regalar con Mercado Pago${selectedPriceLabel ? ` ${selectedPriceLabel}` : ""}`
@@ -627,7 +654,7 @@ export default function GiftCardSection() {
 
               <button
                 type="button"
-                disabled={loading}
+                disabled={loading !== null}
                 onClick={() => {
                   if (!validateOrShowErrors()) return;
                   window.open(whatsappHref(giftMessage()), "_blank", "noopener,noreferrer");
