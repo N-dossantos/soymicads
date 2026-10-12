@@ -624,7 +624,7 @@ export default function GiftCardSection() {
                 >
                   {loading === "card"
                     ? "Redirigiendo al pago…"
-                    : `Regalar con tarjeta${selectedCardPriceLabel ? ` ${selectedCardPriceLabel}` : ""}`}
+                    : `Regalar con Stripe${selectedCardPriceLabel ? ` ${selectedCardPriceLabel}` : ""}`}
                 </button>
               )}
 

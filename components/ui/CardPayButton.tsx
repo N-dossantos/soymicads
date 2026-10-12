@@ -61,7 +61,7 @@ export default function CardPayButton({ productId, className = "" }: CardPayButt
         disabled={loading}
         className={`${rainbowPseudo} min-h-[44px] flex items-center justify-center w-full py-3 rounded-full text-sm font-medium border border-[rgba(107,79,58,0.14)] text-[#2C2018] backdrop-blur-sm before:bg-white/55 before:opacity-90 hover:before:opacity-40 disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
       >
-        {loading ? "Redirigiendo al pago…" : `Pagar con tarjeta ${price}`}
+        {loading ? "Redirigiendo al pago…" : `Pagar con Stripe ${price}`}
       </button>
 
       {error && (

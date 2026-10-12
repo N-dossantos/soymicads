@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 41_000,
     priceTransferARS: 37_000,
     priceBizumEUR: 25,
-    priceCardEUR: 25.5,
+    priceCardEUR: 1,
     mercadoLink: "https://mpago.la/2xZRfT4",
     calendlyLink: "https://cal.com/soymicads/disenar-me",
     paymentMethod: "mercadopago",
