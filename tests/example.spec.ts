@@ -9,15 +9,16 @@ test.describe('Mica Ds site', () => {
     await expect(page.getByRole('heading', { name: 'Proceso completo' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Para conocernos — Sesión corta' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Pagar con Bizum €125' })).toBeVisible();
-    // En EUR la tarjeta lleva un 2% de recargo y no se ofrece transferencia.
-    await expect(page.getByRole('button', { name: 'Pagar con tarjeta €127,50' })).toBeVisible();
+    // En EUR la tarjeta cobra el precio de lista (Bizum tiene descuento) y no hay transferencia.
+    await expect(page.getByRole('button', { name: 'Pagar con Stripe €127,50' })).toBeVisible();
+    await expect(page.getByText('2% de descuento pagando con Bizum').first()).toBeVisible();
     await expect(page.getByRole('button', { name: /^Transferencia/ })).toHaveCount(0);
 
     await page.getByRole('button', { name: 'ARS' }).click();
 
     await expect(page.getByRole('button', { name: 'Pagar con Mercado Pago $230.000' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Transferencia — $210.000' })).toBeVisible();
-    await expect(page.getByRole('button', { name: /^Pagar con tarjeta/ })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /^Pagar con Stripe/ })).toHaveCount(0);
 
     await page.getByRole('button', { name: 'EUR' }).click();
 
@@ -42,7 +43,7 @@ test.describe('Mica Ds site', () => {
 
     await page.goto('/');
     await page.getByRole('button', { name: 'EUR' }).click();
-    await page.getByRole('button', { name: 'Pagar con tarjeta €127,50' }).click();
+    await page.getByRole('button', { name: 'Pagar con Stripe €127,50' }).click();
 
     await expect(page).toHaveURL(/checkout\.stripe\.com\/c\/pay\/cs_test_fake/);
   });

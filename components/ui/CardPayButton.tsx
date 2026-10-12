@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatPrice, getCardPriceEUR, getProductById } from "@/lib/products";
+import { formatPrice, getProductById } from "@/lib/products";
 
 interface CardPayButtonProps {
   productId: string;
@@ -25,7 +25,7 @@ export default function CardPayButton({ productId, className = "" }: CardPayButt
   const product = getProductById(productId);
   if (!product) return null;
 
-  const price = formatPrice(getCardPriceEUR(product), "EUR");
+  const price = formatPrice(product.priceEUR, "EUR");
 
   async function handleCardCheckout() {
     setError(null);

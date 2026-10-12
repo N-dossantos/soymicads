@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { useCurrency } from "@/lib/currency-context";
-import { getProductById, formatPrice } from "@/lib/products";
+import { getProductById, formatPrice, getBizumDiscountPercent } from "@/lib/products";
 import { Portal } from "@/lib/portal";
 import { useDialogA11y } from "@/lib/useDialogA11y";
 
@@ -56,6 +56,8 @@ export default function PayButton({
 
   // EUR no usa Mercado Pago. Ese flujo se integrará más adelante.
   if (currency === "EUR") {
+    const bizumDiscount = getBizumDiscountPercent(product);
+
     async function copyBizumPhone() {
       try {
         await navigator.clipboard.writeText(bizumPhone);
@@ -71,9 +73,14 @@ export default function PayButton({
         <button
           type="button"
           onClick={() => setBizumOpen(true)}
-          className={`${rainbowPseudo} min-h-[44px] flex items-center justify-center w-full py-3 rounded-full text-sm font-medium border border-[rgba(107,79,58,0.14)] text-[#2C2018] backdrop-blur-sm before:bg-white/55 before:opacity-90 hover:before:opacity-40 ${className}`}        >
+          // Liso como Transferencia en reposo; el arcoíris aparece recién en hover.
+          className={`${rainbowPseudo} min-h-[44px] flex items-center justify-center w-full py-2.5 rounded-full text-sm font-medium border border-[#C9B9A9]/60 text-[#53392B] before:bg-white before:opacity-100 hover:before:opacity-40 ${className}`}
+        >
           Pagar con Bizum {price}
         </button>
+        {bizumDiscount > 0 ? (
+          <p className="text-xs text-[#7A6A5A] text-center">{bizumDiscount}% de descuento pagando con Bizum</p>
+        ) : null}
 
         {bizumOpen ? (
           <Portal>

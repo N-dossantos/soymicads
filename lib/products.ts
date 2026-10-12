@@ -12,12 +12,11 @@ export interface Product {
   title: string;
   description: string;
   priceARS: number;
-  priceEUR: number;
+  priceEUR: number; // Precio de lista en EUR — es lo que se cobra con tarjeta (Stripe)
   // Precios específicos por método para poder ingresarlos manualmente
   priceMercadoARS?: number; // Mercado Pago (ARS)
   priceTransferARS?: number; // Transferencia bancaria (ARS)
-  priceBizumEUR?: number; // Bizum / pago en EUR
-  priceCardEUR?: number; // Tarjeta vía Stripe (EUR) — Bizum + 2% de recargo
+  priceBizumEUR?: number; // Bizum (EUR) — precio con descuento sobre priceEUR
   mercadoLink?: string; // Link de pago de Mercado Pago proporcionado manualmente
   calendlyLink?: string; // Link de agenda para esta sesión
   paymentMethod: PaymentMethod;
@@ -31,11 +30,10 @@ export const PRODUCTS: Product[] = [
     title: "Sesión suelta — Diseñar(me)",
     description: "Sesión única para explorar y despejar dudas.",
     priceARS: 37_000,
-    priceEUR: 25,
+    priceEUR: 25.5,
     priceMercadoARS: 41_000,
     priceTransferARS: 37_000,
     priceBizumEUR: 25,
-    priceCardEUR: 1,
     mercadoLink: "https://mpago.la/2xZRfT4",
     calendlyLink: "https://cal.com/soymicads/disenar-me",
     paymentMethod: "mercadopago",
@@ -46,11 +44,10 @@ export const PRODUCTS: Product[] = [
     title: "Proceso completo — Diseñar(me)",
     description: "6 sesiones + reporte personalizado.",
     priceARS: 210_000,
-    priceEUR: 125,
+    priceEUR: 127.5,
     priceMercadoARS: 230_000,
     priceTransferARS: 210_000,
     priceBizumEUR: 125,
-    priceCardEUR: 127.5,
     mercadoLink: "https://mpago.la/1QHUbwd",
     calendlyLink: "https://cal.com/soymicads/disenar-me",
     paymentMethod: "mercadopago",
@@ -63,11 +60,10 @@ export const PRODUCTS: Product[] = [
     title: "Proceso completo — Diseñar(nos) Pareja",
     description: "4 sesiones en pareja + 2 individuales + pdf personalizado.",
     priceARS: 360_000,
-    priceEUR: 210,
+    priceEUR: 214.2,
     priceMercadoARS: 390_000,
     priceTransferARS: 360_000,
     priceBizumEUR: 210,
-    priceCardEUR: 214.2,
     mercadoLink: "https://mpago.la/1a9RMSA",
     calendlyLink: "https://cal.com/soymicads/disenar-nos",
     paymentMethod: "mercadopago",
@@ -80,11 +76,10 @@ export const PRODUCTS: Product[] = [
     title: "Proceso completo — Grupo (por persona)",
     description: "Proceso completo por persona en equipo.",
     priceARS: 80_000,
-    priceEUR: 50,
+    priceEUR: 51,
     priceMercadoARS: 80_000,
     priceTransferARS: 80_000,
     priceBizumEUR: 50,
-    priceCardEUR: 51,
     calendlyLink: "https://cal.com/soymicads/disenar-nos",
     paymentMethod: "mercadopago",
     category: "diseniarme",
@@ -100,7 +95,6 @@ export const PRODUCTS: Product[] = [
     priceMercadoARS: 0,
     priceTransferARS: 0,
     priceBizumEUR: 0,
-    priceCardEUR: 0,
     calendlyLink: "https://cal.com/soymicads/encuentro-para-conocernos",
     paymentMethod: "mercadopago",
     category: "diseniarme",
@@ -110,11 +104,10 @@ export const PRODUCTS: Product[] = [
     title: "Charlita — Acompañamiento desde mi mirada",
     description: "Sesión de 1 hora enfocada en presencia y lectura.",
     priceARS: 40_000,
-    priceEUR: 25,
+    priceEUR: 25.5,
     priceMercadoARS: 44_000,
     priceTransferARS: 40_000,
     priceBizumEUR: 25,
-    priceCardEUR: 25.5,
     mercadoLink: "https://mpago.la/25j453h",
     calendlyLink: "https://cal.com/soymicads/charlita",
     paymentMethod: "mercadopago",
@@ -131,8 +124,12 @@ export function formatPrice(amount: number, currency: Currency): string {
   return `€${amount.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-export function getCardPriceEUR(product: Product): number {
-  return product.priceCardEUR ?? product.priceEUR;
+// Descuento de Bizum sobre el precio de lista, redondeado (p. ej. 2 para
+// €125 vs €127,50). Se deriva de los precios para que el texto nunca quede
+// desfasado si cambian.
+export function getBizumDiscountPercent(product: Product): number {
+  if (!product.priceBizumEUR || !product.priceEUR) return 0;
+  return Math.max(0, Math.round((1 - product.priceBizumEUR / product.priceEUR) * 100));
 }
 
 export function getProductById(id: string): Product | undefined {

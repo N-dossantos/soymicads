@@ -233,7 +233,7 @@ export default function Service() {
                                   "Gratis"
                                 ) : product ? (
                                   currency === "ARS" ? (
-                                    formatPrice(product.priceARS, "ARS")
+                                    formatPrice(product.priceMercadoARS ?? product.priceARS, "ARS")
                                   ) : (
                                     formatPrice(product.priceEUR, "EUR")
                                   )
@@ -328,16 +328,20 @@ export default function Service() {
                               </div>
                             ) : product ? (
                               <>
-                                {/* EUR: tarjeta (Stripe) + Bizum. ARS: transferencia + Mercado Pago. */}
+                                {/* EUR: tarjeta (Stripe) + Bizum. ARS: Mercado Pago + transferencia. */}
                                 <div className="w-full">
                                   {currency === "EUR" ? (
                                     <CardPayButton productId={product.id} />
                                   ) : (
-                                    <TransferButton productId={product.id} />
+                                    <PayButton productId={product.id} variant="primary" />
                                   )}
                                 </div>
                                 <div className="w-full">
-                                  <PayButton productId={product.id} variant="primary" />
+                                  {currency === "EUR" ? (
+                                    <PayButton productId={product.id} variant="primary" />
+                                  ) : (
+                                    <TransferButton productId={product.id} />
+                                  )}
                                 </div>
                               </>
                             ) : (

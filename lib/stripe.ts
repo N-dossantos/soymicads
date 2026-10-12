@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { getCardPriceEUR, type Product } from "@/lib/products";
+import type { Product } from "@/lib/products";
 
 export function getStripeClient(): Stripe {
   const secretKey = process.env.STRIPE_SECRET_KEY;
@@ -31,7 +31,8 @@ export async function createCardCheckoutSession({
   metadata = {},
   gift = false,
 }: CardCheckoutOptions): Promise<string | null> {
-  const unitAmount = Math.round(getCardPriceEUR(product) * 100);
+  // Con tarjeta se cobra el precio de lista; Bizum es el que tiene descuento.
+  const unitAmount = Math.round(product.priceEUR * 100);
   if (unitAmount <= 0) {
     throw new Error(`El producto ${product.id} no tiene precio con tarjeta.`);
   }

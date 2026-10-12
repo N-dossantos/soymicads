@@ -5,7 +5,7 @@ import { useCurrency } from "@/lib/currency-context";
 import { Portal } from "@/lib/portal";
 import { useDialogA11y } from "@/lib/useDialogA11y";
 import { WHATSAPP_PHONE, whatsappHref } from "@/lib/contact";
-import { formatPrice, getCardPriceEUR } from "@/lib/products";
+import { formatPrice, getBizumDiscountPercent } from "@/lib/products";
 import TransferButton from "@/components/ui/TransferButton";
 import {
   EMPTY_GIFT_CARD_DETAILS,
@@ -90,9 +90,20 @@ export default function GiftCardSection() {
   };
 
   const selectedPriceLabel = selectedProduct ? priceLabel(selectedProduct.id) : null;
-  // En EUR la tarjeta lleva recargo, así que tiene su propio precio.
+  // En EUR la tarjeta cobra el precio de lista y Bizum tiene descuento.
   const selectedCardPriceLabel =
-    mounted && selectedProduct ? formatPrice(getCardPriceEUR(selectedProduct), "EUR") : null;
+    mounted && selectedProduct ? formatPrice(selectedProduct.priceEUR, "EUR") : null;
+  const bizumDiscount =
+    currency === "EUR" && selectedProduct ? getBizumDiscountPercent(selectedProduct) : 0;
+
+  // Precio que se muestra al elegir la propuesta: en EUR, el de lista (el
+  // descuento de Bizum se aclara junto a su botón); en ARS, el de Mercado Pago.
+  const listPriceLabel = (productId: string): string | null => {
+    if (!mounted) return null;
+    const product = products.find((p) => p.id === productId);
+    if (!product) return null;
+    return currency === "EUR" ? formatPrice(product.priceEUR, "EUR") : formatGiftPrice(product, currency);
+  };
 
   function update<K extends keyof GiftCardDetails>(key: K, value: GiftCardDetails[K]) {
     setDetails((prev) => ({ ...prev, [key]: value }));
@@ -243,7 +254,7 @@ export default function GiftCardSection() {
               >
                 {products.map((product, index) => {
                   const selected = details.productId === product.id;
-                  const label = priceLabel(product.id);
+                  const label = listPriceLabel(product.id);
                   return (
                     <label
                       key={product.id}
@@ -644,6 +655,12 @@ export default function GiftCardSection() {
                         : `Regalar con Bizum${selectedPriceLabel ? ` ${selectedPriceLabel}` : ""}`}
                   </button>
                 )}
+
+                {mounted && bizumDiscount > 0 ? (
+                  <p className="text-center text-xs text-[#7A6A5A]">
+                    {bizumDiscount}% de descuento pagando con Bizum
+                  </p>
+                ) : null}
 
                 {submitError ? (
                   <p role="alert" className="text-center text-xs text-[#C0574A]">
