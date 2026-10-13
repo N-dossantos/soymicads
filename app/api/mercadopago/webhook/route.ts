@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { Payment } from "mercadopago";
-import { getMercadoPagoClient } from "@/lib/mercadopago";
+import { getMercadoPagoClient, productIdFromReference } from "@/lib/mercadopago";
+import { handleSuccessfulPurchase } from "@/lib/fulfillment";
 
 function isValidSignature(request: Request, dataId: string): boolean {
   const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET;
@@ -62,8 +63,27 @@ export async function POST(request: Request) {
       status: payment.status,
       external_reference: payment.external_reference,
     });
+
+    // MP también notifica pagos pendientes o rechazados; solo los aprobados
+    // disparan la post-venta.
+    if (payment.status === "approved") {
+      const payerName = [payment.payer?.first_name, payment.payer?.last_name].filter(Boolean).join(" ");
+      await handleSuccessfulPurchase({
+        provider: "mercadopago",
+        paymentId: String(payment.id ?? dataId),
+        productId: productIdFromReference(payment.external_reference),
+        amount: payment.transaction_amount,
+        currency: payment.currency_id,
+        customerEmail: payment.payer?.email,
+        customerName: payerName || undefined,
+        metadata: payment.metadata,
+      });
+    }
   } catch (err) {
-    console.error("[mercadopago webhook] failed to fetch payment", err);
+    // Un 500 hace que MP reintente la notificación; los emails ya enviados no
+    // se duplican porque llevan clave de idempotencia.
+    console.error("[mercadopago webhook] failed to process payment", err);
+    return NextResponse.json({ error: "No se pudo procesar el pago." }, { status: 500 });
   }
 
   return NextResponse.json({ received: true });

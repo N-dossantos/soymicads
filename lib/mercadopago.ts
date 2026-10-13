@@ -1,4 +1,5 @@
 import { MercadoPagoConfig } from "mercadopago";
+import { PRODUCTS } from "@/lib/products";
 
 export function getMercadoPagoClient(): MercadoPagoConfig {
   const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
@@ -29,4 +30,11 @@ export function supportsAutoReturn(origin: string): boolean {
   } catch {
     return false;
   }
+}
+
+// El external_reference se arma como "<productId>-<uuid>" (o
+// "<productId>-gift-<uuid>"), así que el producto se recupera por prefijo.
+export function productIdFromReference(reference: string | undefined): string | undefined {
+  if (!reference) return undefined;
+  return PRODUCTS.find((p) => reference.startsWith(`${p.id}-`))?.id;
 }

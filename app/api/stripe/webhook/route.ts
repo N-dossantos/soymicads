@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripeClient } from "@/lib/stripe";
+import { handleSuccessfulPurchase } from "@/lib/fulfillment";
 
 export async function POST(request: Request) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -28,6 +29,26 @@ export async function POST(request: Request) {
       amount_total: session.amount_total,
       metadata: session.metadata,
     });
+
+    if (session.payment_status === "paid") {
+      try {
+        await handleSuccessfulPurchase({
+          provider: "stripe",
+          paymentId: session.id,
+          productId: session.metadata?.product_id,
+          amount: session.amount_total !== null ? session.amount_total / 100 : undefined,
+          currency: session.currency ?? undefined,
+          customerEmail: session.customer_details?.email ?? undefined,
+          customerName: session.customer_details?.name ?? undefined,
+          metadata: session.metadata,
+        });
+      } catch (err) {
+        // Un 500 hace que Stripe reintente el evento; los emails ya enviados
+        // no se duplican porque llevan clave de idempotencia.
+        console.error("[stripe webhook] fulfillment failed", err);
+        return NextResponse.json({ error: "No se pudo procesar el pago." }, { status: 500 });
+      }
+    }
   }
 
   return NextResponse.json({ received: true });
