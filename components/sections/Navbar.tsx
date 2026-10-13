@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Briefcase,
   ChevronDown,
@@ -12,6 +12,10 @@ import {
 } from "lucide-react";
 import CurrencyToggle from "@/components/ui/CurrencyToggle";
 import { DropdownNavigation, type NavItem } from "@/components/ui/dorpdown-navigation";
+import AccountMenu from "@/components/auth/AccountMenu";
+import LoginModal from "@/components/auth/LoginModal";
+import { useSessionUser } from "@/components/auth/useSessionUser";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 const NAV_ITEMS: NavItem[] = [
   { id: 1, label: "Encuentros gratuitos", href: "#encuentro" },
@@ -92,6 +96,10 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const user = useSessionUser();
+  // Estable: useDialogA11y re-enfoca el modal cada vez que cambia onClose.
+  const closeLogin = useCallback(() => setLoginOpen(false), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -153,6 +161,11 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
 
         <div className="flex items-center gap-2 min-[360px]:gap-3">
           <CurrencyToggle />
+          {isSupabaseConfigured ? (
+            <div className="hidden lg:block">
+              <AccountMenu user={user} onLogin={() => setLoginOpen(true)} />
+            </div>
+          ) : null}
           <button
             className="lg:hidden flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/60 text-[#4A3556] shadow-sm backdrop-blur-xl"
             onClick={() => onMenuOpenChange(!menuOpen)}
@@ -249,9 +262,39 @@ export default function Navbar({ menuOpen, onMenuOpenChange }: NavbarProps) {
                 </div>
               );
             })}
+
+            {/* En móvil la cuenta va dentro del menú: en la barra no entra. */}
+            {isSupabaseConfigured ? (
+              <div className="mt-1 border-t border-[#D8C8B9]/40 pt-2">
+                {user === undefined ? (
+                  <span aria-hidden="true" className="block h-11 animate-pulse rounded-2xl bg-white/60" />
+                ) : user ? (
+                  <a
+                    href="/cuenta"
+                    onClick={closeMobileMenu}
+                    className="block rounded-2xl px-4 py-3 text-sm font-medium text-[#2C2018] transition-colors hover:bg-white/80"
+                  >
+                    Mi cuenta
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      closeMobileMenu();
+                      setLoginOpen(true);
+                    }}
+                    className="block min-h-[44px] w-full rounded-2xl px-4 py-3 text-left text-sm font-medium text-[#2C2018] transition-colors hover:bg-white/80"
+                  >
+                    Ingresar
+                  </button>
+                )}
+              </div>
+            ) : null}
           </div>
         </div>
       )}
+
+      <LoginModal open={loginOpen} onClose={closeLogin} next="/" />
     </nav>
   );
 }

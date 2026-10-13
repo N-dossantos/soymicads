@@ -1,12 +1,18 @@
 "use client";
 
+import { isSupabaseConfigured } from "@/lib/supabase/client";
+
 interface HeroProps {
   menuOpen?: boolean;
 }
 
+// Con el menú móvil abierto, el contenido baja hasta quedar debajo del menú,
+// que es más alto cuando incluye la fila de cuenta ("Ingresar" / "Mi cuenta").
+const MENU_OPEN_PADDING = isSupabaseConfigured ? "pt-[25rem]" : "pt-80";
+
 export default function Hero({ menuOpen }: HeroProps) {
   return (
-    <section className={`relative pb-20 px-4 sm:px-6 backdrop-blur-sm transition-all duration-300 ${menuOpen ? "pt-80" : "pt-28 sm:pt-32"} overflow-hidden`}>
+    <section className={`relative pb-20 px-4 sm:px-6 backdrop-blur-sm transition-all duration-300 ${menuOpen ? MENU_OPEN_PADDING : "pt-28 sm:pt-32"} overflow-hidden`}>
       <div className="absolute top-0 left-0 right-0 z-50 h-1 rainbow-bar" />
       <div className="absolute inset-x-0 top-0 -z-10 mx-auto h-[680px] max-w-6xl">
         <div className="absolute left-8 top-16 h-64 w-64 rounded-full rainbow-glow" />
